@@ -79,8 +79,17 @@ export default function Signup() {
   const [part, setPart] = useState<Part>("frontend");
   const [team, setTeam] = useState<TeamName | "">("");
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordRe, setPasswordRe] = useState("");
 
   const memberOptions = team ? TEAM_MEMBERS[part][team] : [];
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: 회원가입 API 연동
+  };
 
   const handlePartChange = (next: Part) => {
     if (next === part) return;
@@ -95,8 +104,8 @@ export default function Signup() {
   };
 
   return (
-    <main className="flex flex-col gap-3.5 w-[550px]">
-      <p className="text-[20px] font-extrabold leading-[135%] tracking-[-0.02px] py-3 border-b mb-5">
+    <main className="flex flex-col gap-[1.88rem] w-[550px]">
+      <p className="text-[20px] font-extrabold leading-[135%] tracking-[-0.02px] py-3 border-b">
         SIGNUP
       </p>
 
@@ -119,23 +128,70 @@ export default function Signup() {
         })}
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mt-2">
-        <Dropdown
-          label="팀"
-          value={team}
-          placeholder="팀을 선택해 주세요"
-          options={TEAM_NAMES as unknown as string[]}
-          onChange={handleTeamChange}
-        />
-        <Dropdown
-          label="이름"
-          value={name}
-          placeholder="이름을 선택해 주세요"
-          options={memberOptions}
-          onChange={setName}
-          disabled={!team}
-        />
-      </div>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-[1.88rem]">
+        <div className="grid grid-cols-2 gap-4">
+          <Dropdown
+            label="팀"
+            value={team}
+            placeholder="팀을 선택해 주세요"
+            options={TEAM_NAMES as unknown as string[]}
+            onChange={handleTeamChange}
+          />
+          <Dropdown
+            label="이름"
+            value={name}
+            placeholder="이름을 선택해 주세요"
+            options={memberOptions}
+            onChange={setName}
+            disabled={!team}
+          />
+        </div>
+
+        <label className="flex items-center">
+          <span className="text-label1 w-24 shrink-0">아이디</span>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="아이디를 입력해 주세요"
+            className="flex-1 border-b border-black outline-none p-3"
+          />
+        </label>
+
+        <label className="flex items-center">
+          <span className="text-label1 w-24 shrink-0">이메일</span>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="이메일을 입력해 주세요"
+            className="flex-1 border-b border-black outline-none p-3"
+          />
+        </label>
+
+        <label className="flex items-center">
+          <span className="text-label1 w-24 shrink-0">비밀번호</span>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="비밀번호를 입력해 주세요"
+            className="flex-1 border-b border-black outline-none p-3"
+          />
+        </label>
+
+        <label className="flex items-center">
+          <span className="text-label1 w-24 shrink-0">비밀번호 재확인</span>
+          <input
+            type="password"
+            value={passwordRe}
+            onChange={(e) => setPasswordRe(e.target.value)}
+            placeholder="비밀번호를 다시 입력해 주세요"
+            className="flex-1 border-b border-black outline-none p-3"
+          />
+        </label>
+
+      </form>
     </main>
   );
 }
