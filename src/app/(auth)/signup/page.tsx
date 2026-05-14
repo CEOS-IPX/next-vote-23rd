@@ -90,6 +90,9 @@ export default function Signup() {
   const isEmailValid = EMAIL_PATTERN.test(email);
   const showEmailError = email.length > 0 && !isEmailValid;
 
+  const isPasswordMatched = password === passwordRe;
+  const showPasswordError = passwordRe.length > 0 && !isPasswordMatched;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: 회원가입 API 연동
@@ -191,16 +194,23 @@ export default function Signup() {
           />
         </label>
 
-        <label className="flex items-center">
-          <span className="text-label1 w-24 shrink-0">비밀번호 재확인</span>
-          <input
-            type="password"
-            value={passwordRe}
-            onChange={(e) => setPasswordRe(e.target.value)}
-            placeholder="비밀번호를 다시 입력해 주세요"
-            className="flex-1 border-b border-black outline-none p-3"
-          />
-        </label>
+        <div className="flex flex-col">
+          <label className="flex items-center">
+            <span className="text-label1 w-24 shrink-0">비밀번호 재확인</span>
+            <input
+              type="password"
+              value={passwordRe}
+              onChange={(e) => setPasswordRe(e.target.value)}
+              placeholder="비밀번호를 다시 입력해 주세요"
+              className="flex-1 border-b border-black outline-none p-3"
+            />
+          </label>
+          {showPasswordError && (
+            <p className="text-label2 text-red-500 mt-2 ml-24 pl-1">
+              비밀번호가 일치하지 않습니다
+            </p>
+          )}
+        </div>
 
         <button
           type="submit"
