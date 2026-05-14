@@ -86,6 +86,10 @@ export default function Signup() {
 
   const memberOptions = team ? TEAM_MEMBERS[part][team] : [];
 
+  const EMAIL_PATTERN = /^[A-Za-z0-9_.-]+@[A-Za-z0-9-]+\.[A-Za-z0-9-]+/;
+  const isEmailValid = EMAIL_PATTERN.test(email);
+  const showEmailError = email.length > 0 && !isEmailValid;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: 회원가입 API 연동
@@ -158,16 +162,23 @@ export default function Signup() {
           />
         </label>
 
-        <label className="flex items-center">
-          <span className="text-label1 w-24 shrink-0">이메일</span>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="이메일을 입력해 주세요"
-            className="flex-1 border-b border-black outline-none p-3"
-          />
-        </label>
+        <div className="flex flex-col">
+          <label className="flex items-center">
+            <span className="text-label1 w-24 shrink-0">이메일</span>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="이메일을 입력해 주세요"
+              className="flex-1 border-b border-black outline-none p-3"
+            />
+          </label>
+          {showEmailError && (
+            <p className="text-label2 text-red-500 mt-2 ml-24 pl-1">
+              이메일 형식이 올바르지 않습니다
+            </p>
+          )}
+        </div>
 
         <label className="flex items-center">
           <span className="text-label1 w-24 shrink-0">비밀번호</span>
