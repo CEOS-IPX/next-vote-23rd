@@ -1,12 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import {
-  Part,
-  TEAM_MEMBERS,
-  TEAM_NAMES,
-  TeamName,
-} from "@/constants/teams";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TEAM_MEMBERS, TEAM_NAMES } from "@/constants/teams";
+import { signupSchema, SignupForm } from "@/schemas/signup";
 
 type DropdownProps = {
   label: string;
@@ -76,38 +74,47 @@ function Dropdown({
 }
 
 export default function Signup() {
-  const [part, setPart] = useState<Part>("frontend");
-  const [team, setTeam] = useState<TeamName | "">("");
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordRe, setPasswordRe] = useState("");
+  const {
+    register,
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<SignupForm>({
+    resolver: zodResolver(signupSchema),
+    mode: "onChange",
+    defaultValues: {
+      part: "frontend",
+      team: "",
+      member: "",
+      username: "",
+      email: "",
+      password: "",
+      passwordRe: "",
+    },
+  });
 
-  const memberOptions = team ? TEAM_MEMBERS[part][team] : [];
+  const part = watch("part");
+  const team = watch("team");
+  const email = watch("email");
+  const passwordRe = watch("passwordRe");
 
-  const EMAIL_PATTERN = /^[A-Za-z0-9_.-]+@[A-Za-z0-9-]+\.[A-Za-z0-9-]+/;
-  const isEmailValid = EMAIL_PATTERN.test(email);
-  const showEmailError = email.length > 0 && !isEmailValid;
+  const memberOptions =
+    team && TEAM_MEMBERS[part][team as keyof (typeof TEAM_MEMBERS)["frontend"]]
+      ? TEAM_MEMBERS[part][team as keyof (typeof TEAM_MEMBERS)["frontend"]]
+      : [];
 
-  const isPasswordMatched = password === passwordRe;
-  const showPasswordError = passwordRe.length > 0 && !isPasswordMatched;
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: 회원가입 API 연동
-  };
-
-  const handlePartChange = (next: Part) => {
+  const handlePartChange = (next: SignupForm["part"]) => {
     if (next === part) return;
-    setPart(next);
-    setTeam("");
-    setName("");
+    setValue("part", next);
+    setValue("team", "");
+    setValue("member", "");
   };
 
-  const handleTeamChange = (next: string) => {
-    setTeam(next as TeamName);
-    setName("");
+  const onSubmit = (data: SignupForm) => {
+    console.log(data);
+    // TODO: 회원가입 API 연동
   };
 
   return (
@@ -135,75 +142,96 @@ export default function Signup() {
         })}
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
         <div className="grid grid-cols-2 gap-4">
-          <Dropdown
-            label="팀"
-            value={team}
-            placeholder="팀을 선택해 주세요"
-            options={TEAM_NAMES as unknown as string[]}
-            onChange={handleTeamChange}
+          <Controller
+            name="team"
+            control={control}
+            render={({ field }) => (
+              <Dropdown
+                label="팀"
+                value={field.value}
+                placeholder="팀을 선택해 주세요"
+                options={TEAM_NAMES as unknown as string[]}
+                onChange={(v) => {
+                  field.onChange(v);
+                  setValue("member", "");
+                }}
+              />
+            )}
           />
-          <Dropdown
-            label="이름"
-            value={name}
-            placeholder="이름을 선택해 주세요"
-            options={memberOptions}
-            onChange={setName}
-            disabled={!team}
+          <Controller
+            name="member"
+            control={control}
+            render={({ field }) => (
+              <Dropdown
+                label="이름"
+                value={field.value}
+                placeholder="이름을 선택해 주세요"
+                options={memberOptions}
+                onChange={field.onChange}
+                disabled={!team}
+              />
+            )}
           />
         </div>
 
         <label className="flex items-center mt-[1.88rem]">
-          <span className="text-label1 w-[140px] shrink-0 whitespace-nowrap">아이디</span>
+          <span className="text-label1 w-[140px] shrink-0 whitespace-nowrap">
+            아이디
+          </span>
           <input
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            {...register("username")}
             placeholder="아이디를 입력해 주세요"
             className="flex-1 border-b border-black outline-none p-3"
           />
         </label>
 
         <label className="flex items-center mt-[1.88rem]">
-          <span className="text-label1 w-[140px] shrink-0 whitespace-nowrap">이메일</span>
+          <span className="text-label1 w-[140px] shrink-0 whitespace-nowrap">
+            이메일
+          </span>
           <input
             type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            {...register("email")}
             placeholder="이메일을 입력해 주세요"
             className="flex-1 border-b border-black outline-none p-3"
           />
         </label>
 
-        <p className="text-label2 text-red-500 py-2 ml-[140px] pl-3">
-          {showEmailError ? "이메일 형식이 올바르지 않습니다" : " "}
+        <p className="text-label2 text-red-500 py-2 ml-[140px] pl-3 min-h-[2.5rem]">
+          {email.length > 0 && errors.email ? errors.email.message : " "}
         </p>
 
         <label className="flex items-center">
-          <span className="text-label1 w-[140px] shrink-0 whitespace-nowrap">비밀번호</span>
+          <span className="text-label1 w-[140px] shrink-0 whitespace-nowrap">
+            비밀번호
+          </span>
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password")}
             placeholder="비밀번호를 입력해 주세요"
             className="flex-1 border-b border-black outline-none p-3"
           />
         </label>
 
         <label className="flex items-center mt-[1.88rem]">
-          <span className="text-label1 w-[140px] shrink-0 whitespace-nowrap">비밀번호 재확인</span>
+          <span className="text-label1 w-[140px] shrink-0 whitespace-nowrap">
+            비밀번호 재확인
+          </span>
           <input
             type="password"
-            value={passwordRe}
-            onChange={(e) => setPasswordRe(e.target.value)}
+            {...register("passwordRe")}
             placeholder="비밀번호를 다시 입력해 주세요"
             className="flex-1 border-b border-black outline-none p-3"
           />
         </label>
 
-        <p className="text-label2 text-red-500 py-2 ml-[140px] pl-3">
-          {showPasswordError ? "비밀번호가 일치하지 않습니다" : " "}
+        <p className="text-label2 text-red-500 py-2 ml-[140px] pl-3 min-h-[2.5rem]">
+          {passwordRe.length > 0 && errors.passwordRe
+            ? errors.passwordRe.message
+            : " "}
         </p>
 
         <button
