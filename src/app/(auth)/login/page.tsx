@@ -29,7 +29,7 @@ export default function Login() {
   };
 
   return (
-    <main className="flex flex-col gap-3.5 w-137.5">
+    <main className="flex flex-col gap-3.5 w-full md:w-137.5 px-6 md:px-0">
       <p className="text-heading1 py-3 border-b mb-5">LOGIN</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3.5">
@@ -73,7 +73,7 @@ export default function Login() {
         href="/signup"
         className="text-center cursor-pointer underline text-gray-500"
       >
-        아직 계정이 없나요? 회원 가입 하러 가기
+        아직 계정이 없나요?<br className="md:hidden" />회원 가입 하러 가기
       </Link>
     </main>
   );
