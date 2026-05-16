@@ -132,7 +132,7 @@ export default function Signup() {
               key={p}
               type="button"
               onClick={() => handlePartChange(p)}
-              className={`w-[17.1875rem] h-[3.1875rem] border border-black text-label2 cursor-pointer transition-colors ${rounded} ${
+              className={`w-1/2 md:w-[17.1875rem] h-[3.1875rem] border border-black text-label2 cursor-pointer transition-colors ${rounded} ${
                 selected ? "bg-black text-white" : "bg-white text-black"
               }`}
             >
