@@ -37,6 +37,15 @@ export default function VotingLeader() {
         ))}
       </ul>
 
+      <button
+        type="button"
+        disabled={!selected}
+        className={`absolute top-[31.625rem] left-[68.75rem] w-[11.0625rem] h-[6.75rem] rounded-lg flex items-center justify-center text-label1 cursor-pointer disabled:cursor-not-allowed ${
+          selected ? "bg-white/60" : "bg-transparent"
+        }`}
+      >
+        {selected && <>투표하기 &gt;</>}
+      </button>
     </main>
   );
 }
