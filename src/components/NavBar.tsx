@@ -12,7 +12,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "VOTING", href: "#" },
-  { label: "MEMBERS", href: "#" },
+  { label: "MEMBERS", href: "/members" },
   { label: "ABOUT US", href: "#" },
   { label: "LOGIN", href: "/login" },
 ];
@@ -26,7 +26,7 @@ export default function NavBar({ className }: { className?: string }) {
       {/* 데스크탑 */}
       <div className="hidden md:flex flex-row">
         <div className="flex items-center w-145 h-9 border-3 px-6 text-body1">
-          2026 23TH CEOS AWARDS
+          2026 23RD CEOS AWARDS
         </div>
         <div className="flex items-center justify-around w-145 h-9 bg-black text-white px-7.5">
           {NAV_ITEMS.map((item) => (
@@ -51,7 +51,12 @@ export default function NavBar({ className }: { className?: string }) {
           AWARDS
         </span>
         <button onClick={() => setOpen(true)} className="cursor-pointer">
-          <Image src="/icons/icon-hamburger.svg" alt="메뉴" width={24} height={24} />
+          <Image
+            src="/icons/icon-hamburger.svg"
+            alt="메뉴"
+            width={24}
+            height={24}
+          />
         </button>
       </div>
 
@@ -61,7 +66,12 @@ export default function NavBar({ className }: { className?: string }) {
           <div className="flex-1" onClick={() => setOpen(false)} />
           <div className="w-2/3 h-full bg-[#191F28] flex flex-col items-end pt-16 px-8 gap-10 relative">
             <button onClick={() => setOpen(false)} className="cursor-pointer">
-              <Image src="/icons/icon-mobile-x.svg" alt="닫기" width={24} height={24} />
+              <Image
+                src="/icons/icon-mobile-x.svg"
+                alt="닫기"
+                width={24}
+                height={24}
+              />
             </button>
             {NAV_ITEMS.map((item) => (
               <Link
