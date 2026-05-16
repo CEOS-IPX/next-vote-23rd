@@ -118,21 +118,21 @@ export default function Signup() {
   };
 
   return (
-    <main className="flex flex-col gap-[1.88rem] w-[550px]">
-      <p className="text-[20px] font-extrabold leading-[135%] tracking-[-0.02px] py-3 border-b">
+    <main className="flex flex-col gap-[1.88rem] w-[34.375rem]">
+      <p className="text-[1.25rem] font-extrabold leading-[135%] tracking-[-0.00125rem] py-3 border-b">
         SIGNUP
       </p>
 
       <div className="flex">
         {(["frontend", "backend"] as const).map((p, idx) => {
           const selected = part === p;
-          const rounded = idx === 0 ? "rounded-l-[12px]" : "rounded-r-[12px]";
+          const rounded = idx === 0 ? "rounded-l-[0.75rem]" : "rounded-r-[0.75rem]";
           return (
             <button
               key={p}
               type="button"
               onClick={() => handlePartChange(p)}
-              className={`w-[275px] h-[51px] border border-black text-label2 cursor-pointer transition-colors ${rounded} ${
+              className={`w-[17.1875rem] h-[3.1875rem] border border-black text-label2 cursor-pointer transition-colors ${rounded} ${
                 selected ? "bg-black text-white" : "bg-white text-black"
               }`}
             >
@@ -177,7 +177,7 @@ export default function Signup() {
         </div>
 
         <label className="flex items-center mt-[1.88rem]">
-          <span className="text-label1 w-[140px] shrink-0 whitespace-nowrap">
+          <span className="text-label1 w-[8.75rem] shrink-0 whitespace-nowrap">
             아이디
           </span>
           <input
@@ -189,7 +189,7 @@ export default function Signup() {
         </label>
 
         <label className="flex items-center mt-[1.88rem]">
-          <span className="text-label1 w-[140px] shrink-0 whitespace-nowrap">
+          <span className="text-label1 w-[8.75rem] shrink-0 whitespace-nowrap">
             이메일
           </span>
           <input
@@ -200,12 +200,12 @@ export default function Signup() {
           />
         </label>
 
-        <p className="text-label2 text-red-500 py-2 ml-[140px] pl-3 min-h-[2.5rem]">
+        <p className="text-label2 text-red-500 py-2 ml-[8.75rem] pl-3 min-h-[2.5rem]">
           {email.length > 0 && errors.email ? errors.email.message : " "}
         </p>
 
         <label className="flex items-center">
-          <span className="text-label1 w-[140px] shrink-0 whitespace-nowrap">
+          <span className="text-label1 w-[8.75rem] shrink-0 whitespace-nowrap">
             비밀번호
           </span>
           <input
@@ -217,7 +217,7 @@ export default function Signup() {
         </label>
 
         <label className="flex items-center mt-[1.88rem]">
-          <span className="text-label1 w-[140px] shrink-0 whitespace-nowrap">
+          <span className="text-label1 w-[8.75rem] shrink-0 whitespace-nowrap">
             비밀번호 재확인
           </span>
           <input
@@ -228,7 +228,7 @@ export default function Signup() {
           />
         </label>
 
-        <p className="text-label2 text-red-500 py-2 ml-[140px] pl-3 min-h-[2.5rem]">
+        <p className="text-label2 text-red-500 py-2 ml-[8.75rem] pl-3 min-h-[2.5rem]">
           {passwordRe.length > 0 && errors.passwordRe
             ? errors.passwordRe.message
             : " "}
