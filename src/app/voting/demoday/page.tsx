@@ -7,8 +7,32 @@ export default function VotingDemoday() {
   const [selected, setSelected] = useState<TeamName | null>(null);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF] flex flex-col pt-[12.75rem] pl-[21.75rem]">
-      <ul className="flex flex-col items-start gap-12">
+    <main className="relative min-h-screen bg-gradient-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF] flex flex-col pt-[12.75rem] pb-[17.625rem] pl-[21.75rem]">
+      <div className="absolute bottom-[11.25rem] left-[45.8125rem]">
+        <svg
+          width="197"
+          height="197"
+          viewBox="0 0 197 197"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M122.926 38.0869L123.296 38.6377L123.947 38.5098L166.884 30.1152L158.49 73.0527L158.362 73.7041L158.913 74.0742L195.207 98.5L158.913 122.926L158.362 123.296L158.49 123.947L166.884 166.884L123.947 158.49L123.296 158.362L122.926 158.913L98.5 195.207L74.0742 158.913L73.7041 158.362L73.0527 158.49L30.1152 166.884L38.5098 123.947L38.6377 123.296L38.0869 122.926L1.79199 98.5L38.0869 74.0742L38.6377 73.7041L38.5098 73.0527L30.1152 30.1152L73.0527 38.5098L73.7041 38.6377L74.0742 38.0869L98.5 1.79199L122.926 38.0869Z"
+            fill={selected ? "#EAF4FF" : "#5DA9FF"}
+            fillOpacity={selected ? 0.8 : 1}
+            stroke="#5DA9FF"
+            strokeWidth="2"
+          />
+        </svg>
+        <button
+          type="button"
+          disabled={!selected}
+          className="absolute inset-0 flex items-center justify-center text-label1 cursor-pointer disabled:cursor-not-allowed"
+        >
+          {selected && <>투표하기 &gt;</>}
+        </button>
+      </div>
+      <ul className="flex-1 flex flex-col items-start justify-between">
         {TEAM_NAMES.map((team) => (
           <li key={team}>
             <button
