@@ -1,29 +1,80 @@
+"use client";
+
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, LoginForm } from "@/schemas/login";
 
 export default function Login() {
-  return (
-    <>
-      {/* 헤더 -> 네비게이션 자리 */}
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    resolver: zodResolver(loginSchema),
+    mode: "onChange",
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
 
-      <main className="flex flex-col gap-3.5 w-137.5">
-        <p className="text-heading1 py-3 border-b mb-5">LOGIN</p>
-        <input
-          type="text"
-          className="border h-12 outline-none px-2"
-          placeholder="아이디를 입력해주세요."
-        />
-        <input
-          type="password"
-          className="border h-12 outline-none px-2"
-          placeholder="비밀번호를 입력해주세요."
-        />
-        <button className="border h-16 bg-black text-white cursor-pointer">
+  const username = watch("username");
+  const password = watch("password");
+
+  const onSubmit = (data: LoginForm) => {
+    console.log(data);
+    //로그인 API 연동하기!!
+  };
+
+  return (
+    <main className="flex flex-col gap-3.5 w-full md:w-137.5 px-6 md:px-0">
+      <p className="text-heading1 py-3 border-b mb-5">LOGIN</p>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3.5">
+        <label className="flex flex-col">
+          <input
+            type="text"
+            {...register("username")}
+            className="border h-12 outline-none px-2"
+            placeholder="아이디를 입력해주세요."
+          />
+          <p className="text-label2 text-red-500 py-1 min-h-6">
+            {username.length > 0 && errors.username
+              ? errors.username.message
+              : " "}
+          </p>
+        </label>
+
+        <label className="flex flex-col">
+          <input
+            type="password"
+            {...register("password")}
+            className="border h-12 outline-none px-2"
+            placeholder="비밀번호를 입력해주세요."
+          />
+          <p className="text-label2 text-red-500 py-1 min-h-6">
+            {password.length > 0 && errors.password
+              ? errors.password.message
+              : " "}
+          </p>
+        </label>
+
+        <button
+          type="submit"
+          className="border h-16 bg-black text-white cursor-pointer"
+        >
           로그인 하기
         </button>
-        <button className="cursor-pointer underline text-gray-500">
-          아직 계정이 없나요? 회원 가입 하러 가기
-        </button>
-      </main>
-    </>
+      </form>
+
+      <Link
+        href="/signup"
+        className="text-center cursor-pointer underline text-gray-500"
+      >
+        아직 계정이 없나요?<br className="md:hidden" />회원 가입 하러 가기
+      </Link>
+    </main>
   );
 }
