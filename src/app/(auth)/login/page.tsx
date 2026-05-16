@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginForm } from "@/schemas/login";
+// 백엔드 연동 시 주석 처리 부분 사용 예정
+//import { setAccessToken } from "@/lib/auth";
+//import { useRouter } from "next/navigation";
 
 export default function Login() {
   const {
@@ -20,12 +23,31 @@ export default function Login() {
     },
   });
 
+  //const router = useRouter();
   const username = watch("username");
   const password = watch("password");
 
-  const onSubmit = (data: LoginForm) => {
-    console.log(data);
-    //로그인 API 연동하기!!
+  const onSubmit = async (data: LoginForm) => {
+    try {
+      {
+        /*
+      const res = await fetch("/api/auth/login", {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify(data),
+         credentials: "include", 
+       });
+       const { accessToken } = await res.json();
+
+       setAccessToken(accessToken);
+
+       router.push("/home"); */
+      }
+
+      console.log("로그인 시도:", data);
+    } catch (error) {
+      console.error("로그인 실패:", error);
+    }
   };
 
   return (
@@ -73,7 +95,9 @@ export default function Login() {
         href="/signup"
         className="text-center cursor-pointer underline text-gray-500"
       >
-        아직 계정이 없나요?<br className="md:hidden" />회원 가입 하러 가기
+        아직 계정이 없나요?
+        <br className="md:hidden" />
+        회원 가입 하러 가기
       </Link>
     </main>
   );
