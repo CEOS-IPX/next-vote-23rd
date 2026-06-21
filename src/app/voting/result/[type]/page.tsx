@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import RankBadge from "@/components/RankBadge";
 import VoteCount from "@/components/VoteCount";
 
@@ -20,6 +21,12 @@ export default async function VotingResult({
         aria-hidden
         className="absolute top-[363px] left-[286px] w-[212px] h-[212px] pointer-events-none"
       />
+      <Link
+        href="/voting"
+        className="absolute top-[667px] left-[751px] text-[20px] font-extrabold leading-[135%] tracking-[-0.02px] text-black"
+      >
+        메인으로 가기 &gt;
+      </Link>
       <svg
         className="absolute top-[194px] left-[785px] w-[144px] h-[144px] pointer-events-none"
         viewBox="0 0 197 197"
