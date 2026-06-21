@@ -1,4 +1,10 @@
-export default function MemberCard() {
+type Props = {
+  name: string;
+  school: string;
+  department: string;
+};
+
+export default function MemberCard({ name, school, department }: Props) {
   return (
     <div className="relative w-[256px] h-[117px] rounded-[8px] bg-[#D9D9D9]">
       <img
@@ -21,10 +27,10 @@ export default function MemberCard() {
       />
       <span className="absolute top-[49px] left-[117px] w-[119px] h-[1px] bg-[#B0B8C1]" />
       <span className="absolute bottom-[71px] left-[117px] w-[119px] text-center text-[14px] font-bold leading-[140%] tracking-[-0.014px] text-[#4E5968]">
-        이름
+        {name}
       </span>
       <span className="absolute top-[60px] left-[117px] w-[119px] text-center text-[12px] font-medium leading-[135%] tracking-[-0.012px] text-[#F9FAFB] whitespace-pre-line">
-        {"학교\n과"}
+        {`${school}\n${department}`}
       </span>
     </div>
   );
