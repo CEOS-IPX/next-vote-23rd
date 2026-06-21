@@ -50,11 +50,22 @@ export default function VotingLeader() {
           <li key={name}>
             <button
               type="button"
-              onClick={() => setSelected(name)}
-              className="relative text-label1 cursor-pointer px-2 py-2 md:px-6"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelected(name);
+              }}
+              className={`relative text-label1 cursor-pointer px-2 py-2 md:px-6 ${
+                selected === name ? "z-10" : ""
+              }`}
             >
               {selected === name && (
-                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[4.375rem] h-[4.375rem] rounded-full bg-[#AAD2FF] blur-[0.625rem] pointer-events-none" />
+                <span
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[5.625rem] h-[5.625rem] rounded-full pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(170,210,255,0.9) 0%, rgba(170,210,255,0) 70%)",
+                  }}
+                />
               )}
               <span className="relative">{name}</span>
             </button>
