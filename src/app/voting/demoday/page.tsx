@@ -7,7 +7,7 @@ export default function VotingDemoday() {
   const [selected, setSelected] = useState<TeamName | null>(null);
 
   return (
-    <main className="relative min-h-screen bg-gradient-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF] flex flex-col pt-[10rem] pb-[5rem] pl-[5rem] md:pt-[9rem] md:pb-[17.625rem] md:pl-[21.75rem]">
+    <main className="relative min-h-screen bg-gradient-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF] flex flex-col pt-[10rem] pb-[5rem] pl-[5rem] md:pt-[13.125rem] md:pb-[15.5rem] md:pl-[21.75rem]">
       <div className="absolute bottom-[3rem] right-[2rem] md:bottom-[10rem] md:right-[30rem]">
         <div className="relative flex items-center justify-center w-[19.0625rem] h-[9.875rem]">
           <img
@@ -56,7 +56,7 @@ export default function VotingDemoday() {
           {selected && <>투표하기 &gt;</>}
         </button>
       </div>
-      <ul className="flex flex-col items-start gap-[1.0625rem] md:flex-1 md:justify-between md:gap-0">
+      <ul className="flex flex-col items-center gap-[1.0625rem] md:flex-1 md:justify-between md:gap-0 md:w-[11.5rem]">
         {TEAM_NAMES.map((team) => (
           <li key={team}>
             <button
