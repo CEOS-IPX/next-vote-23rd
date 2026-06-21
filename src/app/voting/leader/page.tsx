@@ -1,18 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { TEAM_MEMBERS } from "@/constants/teams";
-
-const LEADER_CANDIDATES = [
-  ...TEAM_MEMBERS.frontend.Ditda,
-  ...TEAM_MEMBERS.frontend.JobDri,
-  ...TEAM_MEMBERS.frontend.Groupeat,
-  ...TEAM_MEMBERS.frontend.IPX,
-  ...TEAM_MEMBERS.frontend.CONX,
-];
+import { TEAM_MEMBERS, type Part } from "@/constants/teams";
 
 export default function VotingLeader() {
   const [selected, setSelected] = useState<string | null>(null);
+  // 로그인 연동 후 로그인 정보의 part로 교체
+  const part: Part = "frontend";
+  const candidates = Object.values(TEAM_MEMBERS[part]).flat();
+  const title = part === "backend" ? "BE - LEADER" : "FE - LEADER";
 
   return (
     <main
@@ -40,13 +36,13 @@ export default function VotingLeader() {
             className="absolute -top-[3rem] -left-[2.75rem] w-[8.25rem] h-[8.25rem] pointer-events-none"
           />
           <p className="relative text-[1.25rem] font-bold md:text-[1.5rem]">
-            FE - LEADER
+            {title}
           </p>
         </div>
       </div>
 
       <ul className="absolute top-[25rem] left-[10rem] w-[12.5rem] h-[20rem] md:top-[17rem] md:left-[50rem] md:w-[11.5rem] md:h-[25.625rem] grid grid-cols-2 content-between justify-items-center">
-        {LEADER_CANDIDATES.map((name) => (
+        {candidates.map((name) => (
           <li key={name}>
             <button
               type="button"
