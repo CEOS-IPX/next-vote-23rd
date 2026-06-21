@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { TEAM_NAMES, TeamName } from "@/constants/teams";
 
 export default function VotingDemoday() {
   const [selected, setSelected] = useState<TeamName | null>(null);
+  const router = useRouter();
 
   return (
     <main
@@ -54,7 +56,10 @@ export default function VotingDemoday() {
         <button
           type="button"
           disabled={!selected}
-          className="absolute inset-0 flex items-center justify-center text-label1 cursor-pointer disabled:cursor-not-allowed"
+          onClick={() => router.push("/voting/result/demoday")}
+          className={`absolute inset-0 flex items-center justify-center text-label1 disabled:cursor-default ${
+            selected ? "cursor-pointer" : ""
+          }`}
         >
           {selected && <>투표하기 &gt;</>}
         </button>
