@@ -62,10 +62,18 @@ export default function VotingDemoday() {
             <button
               type="button"
               onClick={() => setSelected(team)}
-              className="relative text-label1 cursor-pointer px-6 py-2"
+              className={`relative text-label1 cursor-pointer px-6 py-2 ${
+                selected === team ? "z-10" : ""
+              }`}
             >
               {selected === team && (
-                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[4.375rem] h-[4.375rem] rounded-full bg-[#AAD2FF] blur-[0.625rem] pointer-events-none" />
+                <span
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[5.625rem] h-[5.625rem] rounded-full pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(170,210,255,0.9) 0%, rgba(170,210,255,0) 70%)",
+                  }}
+                />
               )}
               <span className="relative">{team}</span>
             </button>
