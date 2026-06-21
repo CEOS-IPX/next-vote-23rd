@@ -1,10 +1,14 @@
 type Props = {
   name: string;
-  school: string;
-  department: string;
+  school?: string;
+  department?: string;
 };
 
-export default function MemberCard({ name, school, department }: Props) {
+export default function MemberCard({
+  name,
+  school = "CEOS UNIV",
+  department = "Computer Science",
+}: Props) {
   return (
     <div className="relative w-[256px] h-[117px] rounded-[8px] bg-[#D9D9D9]">
       <img
