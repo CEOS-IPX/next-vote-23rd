@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import MemberCard from "@/components/MemberCard";
 
 const ROLES = ["PM", "DESIGN", "FRONT-END", "BACK-END"] as const;
 type Role = (typeof ROLES)[number];
@@ -20,6 +21,9 @@ export default function Members() {
       <h1 className="absolute top-[155px] left-[640px] text-[32px] font-bold leading-[135%] tracking-[-0.032px] text-black">
         23th MEMBERS
       </h1>
+      <div className="absolute top-[236px] left-[640px]">
+        <MemberCard />
+      </div>
       <div className="absolute top-[183px] left-[97px] flex flex-col items-start justify-between w-[155px] h-[288px] p-[20px] border border-black">
         <span className="absolute -top-[11.5px] -left-[11.5px] w-[23px] h-[23px] border border-black" />
         <span className="absolute -top-[11.5px] -right-[11.5px] w-[23px] h-[23px] border border-black" />
