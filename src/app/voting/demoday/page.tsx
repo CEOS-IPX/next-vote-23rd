@@ -7,7 +7,10 @@ export default function VotingDemoday() {
   const [selected, setSelected] = useState<TeamName | null>(null);
 
   return (
-    <main className="relative min-h-screen bg-gradient-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF] flex flex-col pt-[10rem] pb-[5rem] pl-[5rem] md:pt-[13.125rem] md:pb-[15.5rem] md:pl-[21.75rem]">
+    <main
+      onClick={() => setSelected(null)}
+      className="relative min-h-screen bg-gradient-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF] flex flex-col pt-[10rem] pb-[5rem] pl-[5rem] md:pt-[13.125rem] md:pb-[15.5rem] md:pl-[21.75rem]"
+    >
       <div className="absolute bottom-[3rem] right-[2rem] md:bottom-[10rem] md:right-[30rem]">
         <div className="relative flex items-center justify-center w-[19.0625rem] h-[9.875rem]">
           <img
@@ -61,7 +64,10 @@ export default function VotingDemoday() {
           <li key={team}>
             <button
               type="button"
-              onClick={() => setSelected(team)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelected(team);
+              }}
               className={`relative text-label1 cursor-pointer px-6 py-2 ${
                 selected === team ? "z-10" : ""
               }`}
