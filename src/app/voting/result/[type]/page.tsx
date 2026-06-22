@@ -12,23 +12,23 @@ export default async function VotingResult({
   if (type !== "leader" && type !== "demoday") notFound();
 
   return (
-    <main className="relative min-h-[900px] bg-gradient-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF]">
-      <div className="absolute top-[266px] left-[520px] w-[226px] h-[230px] border border-black" />
-      <div className="absolute top-[529px] left-[605px] w-[292px] h-[182px] border border-black" />
+    <main className="relative min-h-225 bg-linear-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF]">
+      <div className="absolute top-66.5 left-130 w-56.5 h-57.5 border border-black" />
+      <div className="absolute top-132.25 left-151.25 w-73 h-45.5 border border-black" />
       <img
-        src="/Star 8.svg"
+        src="/figures/figure-star-8.svg"
         alt=""
         aria-hidden
-        className="absolute top-[363px] left-[286px] w-[212px] h-[212px] pointer-events-none"
+        className="absolute top-90.75 left-71.5 w-53 h-53 pointer-events-none"
       />
       <Link
         href="/voting"
-        className="absolute top-[667px] left-[751px] text-[20px] font-extrabold leading-[135%] tracking-[-0.02px] text-black"
+        className="absolute top-166.75 left-187.75 text-xl font-extrabold leading-[135%] tracking-[-0.02px] text-black"
       >
         메인으로 가기 &gt;
       </Link>
       <svg
-        className="absolute top-[194px] left-[785px] w-[144px] h-[144px] pointer-events-none"
+        className="absolute top-48.5 left-196.25 w-36 h-36 pointer-events-none"
         viewBox="0 0 197 197"
         fill="none"
         aria-hidden
@@ -39,22 +39,22 @@ export default async function VotingResult({
         />
       </svg>
       {/* TODO: API 연동 후 name, votes 교체 */}
-      <div className="absolute top-[172px] left-[391px]">
+      <div className="absolute top-43 left-97.75">
         <VoteCount name="이름" votes={0} color="#E3E8F5" />
       </div>
-      <div className="absolute top-[416px] left-[683px]">
+      <div className="absolute top-104 left-170.75">
         <VoteCount name="이름" votes={0} color="#F2F4F6" />
       </div>
-      <div className="absolute top-[680px] left-[435px]">
+      <div className="absolute top-170 left-108.75">
         <VoteCount name="이름" votes={0} color="#F2F9F9" />
       </div>
-      <div className="absolute top-[141px] left-[348px]">
+      <div className="absolute top-35.25 left-87">
         <RankBadge rank={1} color="#1B7BE8" />
       </div>
-      <div className="absolute top-[385px] left-[640px]">
+      <div className="absolute top-96.25 left-160">
         <RankBadge rank={2} color="#FFEFB1" />
       </div>
-      <div className="absolute top-[629px] left-[392px]">
+      <div className="absolute top-157.25 left-98">
         <RankBadge rank={3} color="rgba(223, 70, 70, 0.57)" />
       </div>
     </main>

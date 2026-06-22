@@ -3,35 +3,35 @@ import type { Part } from "@/constants/teams";
 
 export default function Voting() {
   // 로그인 연동 후 로그인 정보의 part로 교체
-  const part: Part = "frontend";
+  const part = "frontend" as Part;
   const partLabel = part === "backend" ? "BE" : "FE";
 
   return (
-    <main className="relative min-h-screen bg-gradient-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF]">
+    <main className="relative min-h-screen bg-linear-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF]">
       <Link
         href="/voting/leader"
-        className="absolute top-[10rem] left-[1.5rem] md:top-[12.75rem] md:left-[18rem]"
+        className="absolute top-40 left-6 md:top-51 md:left-72"
       >
-        <div className="relative flex items-center justify-center w-[19.0625rem] h-[9.875rem]">
+        <div className="relative flex items-center justify-center w-76.25 h-39.5">
           <img
-            src="/Ellipse 15.svg"
+            src="/figures/figure-ellipse-15.svg"
             alt=""
             aria-hidden
-            className="absolute top-[calc(50%+0.5rem)] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[20.5625rem] h-[10.875rem] pointer-events-none"
+            className="absolute top-[calc(50%+0.5rem)] left-1/2 -translate-x-1/2 -translate-y-1/2 w-82.25 h-43.5 pointer-events-none"
           />
           <img
-            src="/Ellipse 8.svg"
+            src="/figures/figure-ellipse-8.svg"
             alt=""
             aria-hidden
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[18.625rem] h-[9.75rem] pointer-events-none"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-74.5 h-39 pointer-events-none"
           />
           <img
-            src="/Star 8.svg"
+            src="/figures/figure-star-8.svg"
             alt=""
             aria-hidden
-            className="absolute -top-[3rem] -left-[2.75rem] w-[8.25rem] h-[8.25rem] pointer-events-none"
+            className="absolute -top-12 -left-11 w-33 h-33 pointer-events-none"
           />
-          <p className="relative text-[1.25rem] font-bold md:text-[1.5rem]">
+          <p className="relative text-xl font-bold md:text-2xl">
             {partLabel} - LEADER
           </p>
         </div>
@@ -39,35 +39,35 @@ export default function Voting() {
 
       <Link
         href="/voting/demoday"
-        className="absolute bottom-[3rem] right-[2rem] md:bottom-[10rem] md:right-[30rem]"
+        className="absolute bottom-12 right-8 md:bottom-40 md:right-120"
       >
-        <div className="relative flex items-center justify-center w-[19.0625rem] h-[9.875rem]">
+        <div className="relative flex items-center justify-center w-76.25 h-39.5">
           <img
-            src="/Ellipse 15.svg"
+            src="/figures/figure-ellipse-15.svg"
             alt=""
             aria-hidden
-            className="absolute top-[calc(50%+0.5rem)] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[20.5625rem] h-[10.875rem] pointer-events-none"
+            className="absolute top-[calc(50%+0.5rem)] left-1/2 -translate-x-1/2 -translate-y-1/2 w-82.25 h-43.5 pointer-events-none"
           />
           <img
-            src="/Ellipse 8.svg"
+            src="/figures/figure-ellipse-8.svg"
             alt=""
             aria-hidden
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[18.625rem] h-[9.75rem] pointer-events-none"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-74.5 h-39 pointer-events-none"
           />
           <img
-            src="/Star 8.svg"
+            src="/figures/figure-star-8.svg"
             alt=""
             aria-hidden
-            className="absolute -bottom-[2.25rem] -right-[2.25rem] w-[6.8125rem] h-[6.75rem] pointer-events-none"
+            className="absolute -bottom-9 -right-9 w-27.25 h-27 pointer-events-none"
           />
-          <p className="relative text-[1.25rem] font-bold md:text-[1.5rem]">
+          <p className="relative text-xl font-bold md:text-2xl">
             DEMO-DAY
           </p>
         </div>
       </Link>
 
       <svg
-        className="absolute bottom-[5rem] right-[1rem] w-[9.375rem] h-[9.375rem] md:bottom-[16.5rem] md:left-[48rem] md:right-auto md:w-[12.3125rem] md:h-[12.3125rem] pointer-events-none"
+        className="absolute bottom-20 right-4 w-37.5 h-37.5 md:bottom-66 md:left-192 md:right-auto md:w-49.25 md:h-49.25 pointer-events-none"
         viewBox="0 0 197 197"
         fill="none"
         aria-hidden

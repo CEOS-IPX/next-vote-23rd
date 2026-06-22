@@ -11,36 +11,34 @@ export default function VotingDemoday() {
   return (
     <main
       onClick={() => setSelected(null)}
-      className="relative min-h-screen bg-gradient-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF] flex flex-col pt-[10rem] pb-[5rem] pl-[5rem] md:pt-[13.125rem] md:pb-[15.5rem] md:pl-[21.75rem]"
+      className="relative min-h-screen bg-linear-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF] flex flex-col pt-40 pb-20 pl-20 md:pt-52.5 md:pb-62 md:pl-87"
     >
-      <div className="absolute bottom-[3rem] right-[2rem] md:bottom-[10rem] md:right-[30rem]">
-        <div className="relative flex items-center justify-center w-[19.0625rem] h-[9.875rem]">
+      <div className="absolute bottom-12 right-8 md:bottom-40 md:right-120">
+        <div className="relative flex items-center justify-center w-76.25 h-39.5">
           <img
-            src="/Ellipse 15.svg"
+            src="/figures/figure-ellipse-15.svg"
             alt=""
             aria-hidden
-            className="absolute top-[calc(50%+0.5rem)] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[20.5625rem] h-[10.875rem] pointer-events-none"
+            className="absolute top-[calc(50%+0.5rem)] left-1/2 -translate-x-1/2 -translate-y-1/2 w-82.25 h-43.5 pointer-events-none"
           />
           <img
-            src="/Ellipse 8.svg"
+            src="/figures/figure-ellipse-8.svg"
             alt=""
             aria-hidden
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[18.625rem] h-[9.75rem] pointer-events-none"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-74.5 h-39 pointer-events-none"
           />
           <img
-            src="/Star 8.svg"
+            src="/figures/figure-star-8.svg"
             alt=""
             aria-hidden
-            className="absolute -bottom-[2.25rem] -right-[2.25rem] w-[6.8125rem] h-[6.75rem] pointer-events-none"
+            className="absolute -bottom-9 -right-9 w-27.25 h-27 pointer-events-none"
           />
-          <p className="relative text-[1.25rem] font-bold md:text-[1.5rem]">
-            DEMO-DAY
-          </p>
+          <p className="relative text-xl font-bold md:text-2xl">DEMO-DAY</p>
         </div>
       </div>
-      <div className="absolute bottom-[5rem] right-[1rem] md:bottom-[16.5rem] md:left-[48rem] md:right-auto">
+      <div className="absolute bottom-20 right-4 md:bottom-66 md:left-192 md:right-auto">
         <svg
-          className="w-[9.375rem] h-[9.375rem] md:w-[12.3125rem] md:h-[12.3125rem]"
+          className="w-37.5 h-37.5 md:w-49.25 md:h-49.25"
           viewBox="0 0 197 197"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -64,7 +62,7 @@ export default function VotingDemoday() {
           {selected && <>투표하기 &gt;</>}
         </button>
       </div>
-      <ul className="flex flex-col items-center gap-[1.0625rem] md:flex-1 md:justify-between md:gap-0 md:w-[11.5rem]">
+      <ul className="flex flex-col items-center gap-4.25 md:flex-1 md:justify-between md:gap-0 md:w-46">
         {TEAM_NAMES.map((team) => (
           <li key={team}>
             <button
@@ -79,7 +77,7 @@ export default function VotingDemoday() {
             >
               {selected === team && (
                 <span
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[5.625rem] h-[5.625rem] rounded-full pointer-events-none"
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-22.5 h-22.5 rounded-full pointer-events-none"
                   style={{
                     background:
                       "radial-gradient(circle, rgba(170,210,255,0.9) 0%, rgba(170,210,255,0) 70%)",
