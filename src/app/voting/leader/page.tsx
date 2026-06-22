@@ -52,7 +52,7 @@ export default function VotingLeader() {
                 e.stopPropagation();
                 setSelected(name);
               }}
-              className={`relative text-label1 cursor-pointer px-2 py-2 md:px-6 ${
+              className={`relative text-label1 cursor-pointer px-2 py-2 md:px-6 whitespace-nowrap ${
                 selected === name ? "z-10" : ""
               }`}
             >

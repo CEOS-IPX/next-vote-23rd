@@ -6,9 +6,9 @@ export default function MembersLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="h-screen overflow-y-auto no-scrollbar">
       <NavBar className="w-full mt-0 md:flex md:justify-center md:mt-9" />
-      <div className="flex flex-1 items-center justify-center">{children}</div>
+      {children}
     </div>
   );
 }
