@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useAuthStore } from "@/store/authStore";
-import { API_ENDPOINTS } from "@/constants/api";
+import { API_ENDPOINTS } from "@/constants/endpoint";
 
 type LoginRequest = {
   username: string;
