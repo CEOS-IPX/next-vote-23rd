@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginForm } from "@/schemas/login";
-// 백엔드 연동 시 주석 처리 부분 사용 예정
-//import { setAccessToken } from "@/lib/auth";
-//import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { login } from "@/api/auth";
+import { useAuthStore } from "@/store/authStore";
 
 export default function Login() {
   const {
@@ -23,30 +24,32 @@ export default function Login() {
     },
   });
 
-  //const router = useRouter();
+  const router = useRouter();
+  const setAuth = useAuthStore((s) => s.setAuth);
   const username = watch("username");
   const password = watch("password");
+  const [serverError, setServerError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: LoginForm) => {
+    setServerError("");
+    setIsLoading(true);
+
     try {
-      {
-        /*
-      const res = await fetch("/api/auth/login", {
-         method: "POST",
-         headers: { "Content-Type": "application/json" },
-         body: JSON.stringify(data),
-         credentials: "include", 
-       });
-       const { accessToken } = await res.json();
-
-       setAccessToken(accessToken);
-
-       router.push("/home"); */
+      const res = await login({ username: data.username, password: data.password });
+      setAuth(res.data!.accessToken, res.data!.user);
+      router.push("/members");
+    } catch (err: unknown) {
+      if (err && typeof err === "object" && "response" in err) {
+        const status = (err as { response: { status: number } }).response.status;
+        if (status === 401) {
+          setServerError("아이디 또는 비밀번호가 올바르지 않습니다.");
+        } else {
+          setServerError("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
+        }
       }
-
-      console.log("로그인 시도:", data);
-    } catch (error) {
-      console.error("로그인 실패:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -63,9 +66,7 @@ export default function Login() {
             placeholder="아이디를 입력해주세요."
           />
           <p className="text-label2 text-red-500 py-1 min-h-6">
-            {username.length > 0 && errors.username
-              ? errors.username.message
-              : " "}
+            {username.length > 0 && errors.username ? errors.username.message : " "}
           </p>
         </label>
 
@@ -83,11 +84,16 @@ export default function Login() {
           </p>
         </label>
 
+        {serverError && (
+          <p className="text-label2 text-red-500">{serverError}</p>
+        )}
+
         <button
           type="submit"
-          className="border h-16 bg-black text-white cursor-pointer"
+          disabled={isLoading}
+          className="border h-16 bg-black text-white cursor-pointer disabled:opacity-50"
         >
-          로그인 하기
+          {isLoading ? "로그인 중..." : "로그인 하기"}
         </button>
       </form>
 
