@@ -11,7 +11,7 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "VOTING", href: "#" },
+  { label: "VOTING", href: "/voting" },
   { label: "MEMBERS", href: "/members" },
   { label: "ABOUT US", href: "#" },
   { label: "LOGIN", href: "/login" },
