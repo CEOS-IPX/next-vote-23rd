@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { TEAM_MEMBERS, type Part } from "@/constants/teams";
 
 export default function VotingLeader() {
   const [selected, setSelected] = useState<string | null>(null);
+  const router = useRouter();
   // 로그인 연동 후 로그인 정보의 part로 교체
   const part: Part = "frontend";
   const candidates = Object.values(TEAM_MEMBERS[part]).flat();
@@ -72,8 +74,9 @@ export default function VotingLeader() {
       <button
         type="button"
         disabled={!selected}
-        className={`absolute top-[10rem] right-[1.5rem] left-auto w-[8rem] h-[5rem] md:top-[10.25rem] md:left-[33rem] md:right-auto md:w-[11.0625rem] md:h-[6.75rem] border-[3px] border-[#E8EEFF] flex items-center justify-center text-label1 cursor-pointer disabled:cursor-not-allowed ${
-          selected ? "bg-[rgba(249,250,251,0.80)]" : "bg-transparent"
+        onClick={() => router.push("/voting/result/leader")}
+        className={`absolute top-[10rem] right-[1.5rem] left-auto w-[8rem] h-[5rem] md:top-[10.25rem] md:left-[33rem] md:right-auto md:w-[11.0625rem] md:h-[6.75rem] border-[3px] border-[#E8EEFF] flex items-center justify-center text-label1 disabled:cursor-default ${
+          selected ? "bg-[rgba(249,250,251,0.80)] cursor-pointer" : "bg-transparent"
         }`}
       >
         <span className="absolute -top-[5px] -left-[5px] w-[10px] h-[10px] bg-[#E3E8F5]" />
