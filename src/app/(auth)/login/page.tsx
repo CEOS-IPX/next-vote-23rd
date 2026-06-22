@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginForm } from "@/schemas/login";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Login() {
   const {
@@ -17,34 +18,45 @@ export default function Login() {
     resolver: zodResolver(loginSchema),
     mode: "onChange",
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
 
   const router = useRouter();
   const { login } = useAuth();
-  const username = watch("username");
+  const email = watch("email");
   const password = watch("password");
+  const [loginError, setLoginError] = useState<string | null>(null);
 
-  const onSubmit = async (_data: LoginForm) => {
+  const onSubmit = async (data: LoginForm) => {
+    setLoginError(null);
     try {
-      /* 백엔드 연동 시 주석 해제
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ email: data.email, password: data.password }),
         credentials: "include",
       });
-      const { accessToken } = await res.json();
-      login(accessToken);
-      */
 
-      // 임시: API 연동 전까지 더미 토큰으로 로그인 처리
-      login("dummy-token");
+      if (!res.ok) {
+        if (res.status === 401) {
+          setLoginError("이메일 또는 비밀번호가 올바르지 않습니다.");
+        } else if (res.status === 400) {
+          setLoginError("입력값을 확인해 주세요.");
+        } else if (res.status === 403) {
+          setLoginError("비활성화 또는 탈퇴된 계정입니다.");
+        } else {
+          setLoginError("로그인 중 오류가 발생했습니다. 다시 시도해 주세요.");
+        }
+        return;
+      }
+
+      const { data: responseData } = await res.json();
+      login(responseData.accessToken);
       router.push("/members");
-    } catch (error) {
-      console.error("로그인 실패:", error);
+    } catch {
+      setLoginError("네트워크 오류가 발생했습니다. 다시 시도해 주세요.");
     }
   };
 
@@ -55,15 +67,13 @@ export default function Login() {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3.5">
         <label className="flex flex-col">
           <input
-            type="text"
-            {...register("username")}
+            type="email"
+            {...register("email")}
             className="border h-12 outline-none px-2"
-            placeholder="아이디를 입력해주세요."
+            placeholder="이메일을 입력해주세요."
           />
           <p className="text-label2 text-red-500 py-1 min-h-6">
-            {username.length > 0 && errors.username
-              ? errors.username.message
-              : " "}
+            {email.length > 0 && errors.email ? errors.email.message : " "}
           </p>
         </label>
 
@@ -80,6 +90,10 @@ export default function Login() {
               : " "}
           </p>
         </label>
+
+        {loginError && (
+          <p className="text-label2 text-red-500">{loginError}</p>
+        )}
 
         <button
           type="submit"
