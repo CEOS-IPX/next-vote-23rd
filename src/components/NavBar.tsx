@@ -4,7 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuthStore } from "@/store/authStore";
+import { logout as logoutApi } from "@/api/auth";
 
 interface NavItem {
   label: string;
@@ -21,11 +22,16 @@ export default function NavBar({ className }: { className?: string }) {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const { isLoggedIn, logout } = useAuth();
+  const isLoggedIn = useAuthStore((s) => s.accessToken !== null);
+  const clearAuth = useAuthStore((s) => s.clearAuth);
 
-  const handleLogout = () => {
-    logout();
-    router.push("/login");
+  const handleLogout = async () => {
+    try {
+      await logoutApi();
+    } finally {
+      clearAuth();
+      router.push("/login");
+    }
   };
 
   return (
