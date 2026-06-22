@@ -1,35 +1,69 @@
 "use client";
 
 import { useState } from "react";
-import { TEAM_MEMBERS } from "@/constants/teams";
-
-const LEADER_CANDIDATES = [
-  ...TEAM_MEMBERS.frontend.Ditda,
-  ...TEAM_MEMBERS.frontend.JobDri,
-  ...TEAM_MEMBERS.frontend.Groupeat,
-  ...TEAM_MEMBERS.frontend.IPX,
-  ...TEAM_MEMBERS.frontend.CONX,
-];
+import { useRouter } from "next/navigation";
+import { TEAM_MEMBERS, type Part } from "@/constants/teams";
 
 export default function VotingLeader() {
   const [selected, setSelected] = useState<string | null>(null);
+  const router = useRouter();
+  // 로그인 연동 후 로그인 정보의 part로 교체
+  const part = "frontend" as Part;
+  const candidates = Object.values(TEAM_MEMBERS[part]).flat();
+  const title = part === "backend" ? "BE - LEADER" : "FE - LEADER";
 
   return (
-    <main className="relative min-h-screen bg-gradient-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF]">
-      <p className="absolute top-[10rem] left-[2.5rem] text-[1.25rem] font-bold md:top-[12.75rem] md:left-[28.125rem] md:text-[1.5rem]">
-        FE - LEADER
-      </p>
+    <main
+      onClick={() => setSelected(null)}
+      className="relative min-h-screen bg-gradient-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF]"
+    >
+      <div className="absolute top-40 left-6 md:top-51 md:left-72">
+        <div className="relative flex items-center justify-center w-76.25 h-39.5">
+          <img
+            src="/figures/figure-ellipse-15.svg"
+            alt=""
+            aria-hidden
+            className="absolute top-[calc(50%+0.5rem)] left-1/2 -translate-x-1/2 -translate-y-1/2 w-82.25 h-43.5 pointer-events-none"
+          />
+          <img
+            src="/figures/figure-ellipse-8.svg"
+            alt=""
+            aria-hidden
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-74.5 h-39 pointer-events-none"
+          />
+          <img
+            src="/figures/figure-star-8.svg"
+            alt=""
+            aria-hidden
+            className="absolute -top-12 -left-11 w-33 h-33 pointer-events-none"
+          />
+          <p className="relative text-xl font-bold md:text-2xl">
+            {title}
+          </p>
+        </div>
+      </div>
 
-      <ul className="absolute top-[25rem] left-[10rem] w-[12.5rem] h-[20rem] md:top-[12.75rem] md:left-[46.5625rem] md:w-[11.5rem] md:h-[25.625rem] grid grid-cols-2 content-between justify-items-center">
-        {LEADER_CANDIDATES.map((name) => (
+      <ul className="absolute top-100 left-40 w-50 h-80 md:top-68 md:left-200 md:w-46 md:h-102.5 grid grid-cols-2 content-between justify-items-center">
+        {candidates.map((name) => (
           <li key={name}>
             <button
               type="button"
-              onClick={() => setSelected(name)}
-              className="relative text-label1 cursor-pointer px-2 py-2 md:px-6"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelected(name);
+              }}
+              className={`relative text-label1 cursor-pointer px-2 py-2 md:px-6 ${
+                selected === name ? "z-10" : ""
+              }`}
             >
               {selected === name && (
-                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[4.375rem] h-[4.375rem] rounded-full bg-[#AAD2FF] blur-[0.625rem] pointer-events-none" />
+                <span
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-22.5 h-22.5 rounded-full pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(170,210,255,0.9) 0%, rgba(170,210,255,0) 70%)",
+                  }}
+                />
               )}
               <span className="relative">{name}</span>
             </button>
@@ -40,11 +74,16 @@ export default function VotingLeader() {
       <button
         type="button"
         disabled={!selected}
-        className={`absolute top-[10rem] right-[1.5rem] left-auto w-[8rem] h-[5rem] md:top-[31.625rem] md:left-[68.75rem] md:right-auto md:w-[11.0625rem] md:h-[6.75rem] rounded-lg flex items-center justify-center text-label1 cursor-pointer disabled:cursor-not-allowed ${
-          selected ? "bg-white/60" : "bg-transparent"
+        onClick={() => router.push("/voting/result/leader")}
+        className={`absolute top-40 right-6 left-auto w-32 h-20 md:top-41 md:left-132 md:right-auto md:w-44.25 md:h-27 border-[3px] border-[#E8EEFF] flex items-center justify-center text-label1 disabled:cursor-default ${
+          selected ? "bg-[rgba(249,250,251,0.80)] cursor-pointer" : "bg-transparent"
         }`}
       >
-        {selected && <>투표하기 &gt;</>}
+        <span className="absolute -top-1.25 -left-1.25 w-2.5 h-2.5 bg-[#E3E8F5]" />
+        <span className="absolute -top-1.25 -right-1.25 w-2.5 h-2.5 bg-[#E3E8F5]" />
+        <span className="absolute -bottom-1.25 -left-1.25 w-2.5 h-2.5 bg-[#E3E8F5]" />
+        <span className="absolute -bottom-1.25 -right-1.25 w-2.5 h-2.5 bg-[#E3E8F5]" />
+        {selected && <span className="relative">투표하기 &gt;</span>}
       </button>
     </main>
   );

@@ -1,16 +1,44 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { TEAM_NAMES, TeamName } from "@/constants/teams";
 
 export default function VotingDemoday() {
   const [selected, setSelected] = useState<TeamName | null>(null);
+  const router = useRouter();
 
   return (
-    <main className="relative min-h-screen bg-gradient-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF] flex flex-col pt-[10rem] pb-[5rem] pl-[5rem] md:pt-[12.75rem] md:pb-[17.625rem] md:pl-[21.75rem]">
-      <div className="absolute bottom-[5rem] right-[1rem] md:bottom-[11.25rem] md:left-[45.8125rem] md:right-auto">
+    <main
+      onClick={() => setSelected(null)}
+      className="relative min-h-screen bg-linear-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF] flex flex-col pt-40 pb-20 pl-20 md:pt-52.5 md:pb-62 md:pl-87"
+    >
+      <div className="absolute bottom-12 right-8 md:bottom-40 md:right-120">
+        <div className="relative flex items-center justify-center w-76.25 h-39.5">
+          <img
+            src="/figures/figure-ellipse-15.svg"
+            alt=""
+            aria-hidden
+            className="absolute top-[calc(50%+0.5rem)] left-1/2 -translate-x-1/2 -translate-y-1/2 w-82.25 h-43.5 pointer-events-none"
+          />
+          <img
+            src="/figures/figure-ellipse-8.svg"
+            alt=""
+            aria-hidden
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-74.5 h-39 pointer-events-none"
+          />
+          <img
+            src="/figures/figure-star-8.svg"
+            alt=""
+            aria-hidden
+            className="absolute -bottom-9 -right-9 w-27.25 h-27 pointer-events-none"
+          />
+          <p className="relative text-xl font-bold md:text-2xl">DEMO-DAY</p>
+        </div>
+      </div>
+      <div className="absolute bottom-20 right-4 md:bottom-66 md:left-192 md:right-auto">
         <svg
-          className="w-[9.375rem] h-[9.375rem] md:w-[12.3125rem] md:h-[12.3125rem]"
+          className="w-37.5 h-37.5 md:w-49.25 md:h-49.25"
           viewBox="0 0 197 197"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -26,21 +54,35 @@ export default function VotingDemoday() {
         <button
           type="button"
           disabled={!selected}
-          className="absolute inset-0 flex items-center justify-center text-label1 cursor-pointer disabled:cursor-not-allowed"
+          onClick={() => router.push("/voting/result/demoday")}
+          className={`absolute inset-0 flex items-center justify-center text-label1 disabled:cursor-default ${
+            selected ? "cursor-pointer" : ""
+          }`}
         >
           {selected && <>투표하기 &gt;</>}
         </button>
       </div>
-      <ul className="flex flex-col items-start gap-[1.0625rem] md:flex-1 md:justify-between md:gap-0">
+      <ul className="flex flex-col items-center gap-4.25 md:flex-1 md:justify-between md:gap-0 md:w-46">
         {TEAM_NAMES.map((team) => (
           <li key={team}>
             <button
               type="button"
-              onClick={() => setSelected(team)}
-              className="relative text-label1 cursor-pointer px-6 py-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelected(team);
+              }}
+              className={`relative text-label1 cursor-pointer px-6 py-2 ${
+                selected === team ? "z-10" : ""
+              }`}
             >
               {selected === team && (
-                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[4.375rem] h-[4.375rem] rounded-full bg-[#AAD2FF] blur-[0.625rem] pointer-events-none" />
+                <span
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-22.5 h-22.5 rounded-full pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(170,210,255,0.9) 0%, rgba(170,210,255,0) 70%)",
+                  }}
+                />
               )}
               <span className="relative">{team}</span>
             </button>
