@@ -1,9 +1,12 @@
 import Link from "next/link";
 import type { Part } from "@/constants/teams";
+import { useAuthStore } from "@/store/authStore";
 
 export default function Voting() {
-  // 로그인 연동 후 로그인 정보의 part로 교체
-  const part = "frontend" as Part;
+  const userPart = useAuthStore((state) => state.user?.part?.toLowerCase()) as
+    | Part
+    | undefined;
+  const part: Part = userPart ?? "frontend";
   const partLabel = part === "backend" ? "BE" : "FE";
 
   return (
@@ -60,9 +63,7 @@ export default function Voting() {
             aria-hidden
             className="absolute -bottom-9 -right-9 w-27.25 h-27 pointer-events-none"
           />
-          <p className="relative text-xl font-bold md:text-2xl">
-            DEMO-DAY
-          </p>
+          <p className="relative text-xl font-bold md:text-2xl">DEMO-DAY</p>
         </div>
       </Link>
 

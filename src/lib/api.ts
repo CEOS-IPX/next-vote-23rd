@@ -2,11 +2,13 @@ import axios from "axios";
 import { useAuthStore } from "@/store/authStore";
 import { API_ENDPOINTS } from "@/constants/endpoint";
 
+//맨처음에 백엔드 ai 자겨오는 부분
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   withCredentials: true,
 });
 
+//api 인터셉터 부분
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().accessToken;
   if (token) {
