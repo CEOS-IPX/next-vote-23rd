@@ -1,4 +1,5 @@
 import axios from "axios";
+import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 import { API_ENDPOINTS } from "@/constants/endpoint";
 
@@ -71,9 +72,10 @@ type ReissueResponse = {
 };
 
 export async function signup(body: SignupRequest): Promise<SignupResponse> {
-  const { data } = await axios.post(API_ENDPOINTS.AUTH.SIGNUP, body, {
-    withCredentials: true,
-  });
+  const { data } = await api.post<SignupResponse>(
+    API_ENDPOINTS.AUTH.SIGNUP,
+    body,
+  );
   return data;
 }
 
