@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import type { Part } from "@/constants/teams";
 import { useAuthStore } from "@/store/authStore";
