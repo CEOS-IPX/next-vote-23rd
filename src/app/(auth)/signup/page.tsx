@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { TEAM_MEMBERS, TEAM_NAMES } from "@/constants/teams";
+import { TEAM_NAMES } from "@/constants/teams";
 import { signupSchema, SignupForm } from "@/schemas/signup";
 import { signup } from "@/api/auth";
+import { getCandidates } from "@/api/candidate";
 
 type DropdownProps = {
   label: string;
@@ -111,10 +112,32 @@ export default function Signup() {
   const email = watch("email");
   const passwordRe = watch("passwordRe");
 
-  const memberOptions =
-    team && TEAM_MEMBERS[part][team as keyof (typeof TEAM_MEMBERS)["frontend"]]
-      ? TEAM_MEMBERS[part][team as keyof (typeof TEAM_MEMBERS)["frontend"]]
-      : [];
+  const [memberOptions, setMemberOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!team) {
+      setMemberOptions([]);
+      return;
+    }
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await getCandidates({
+          part: part.toUpperCase(),
+          team,
+        });
+        if (cancelled) return;
+        setMemberOptions(res.success && res.data ? res.data.map((c) => c.name) : []);
+      } catch {
+        if (!cancelled) setMemberOptions([]);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [part, team]);
 
   const handlePartChange = (next: SignupForm["part"]) => {
     if (next === part) return;
