@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import { TEAM_MEMBERS, TEAM_NAMES } from "@/constants/teams";
 import { signupSchema, SignupForm } from "@/schemas/signup";
+import { signup } from "@/api/auth";
 
 type DropdownProps = {
   label: string;
@@ -78,12 +81,16 @@ function Dropdown({
 }
 
 export default function Signup() {
+  const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
     control,
     handleSubmit,
     watch,
     setValue,
+    setError,
     formState: { errors },
   } = useForm<SignupForm>({
     resolver: zodResolver(signupSchema),
@@ -116,9 +123,56 @@ export default function Signup() {
     setValue("member", "");
   };
 
-  const onSubmit = (data: SignupForm) => {
-    console.log(data);
-    // TODO: 회원가입 API 연동
+  const onSubmit = async (data: SignupForm) => {
+    setServerError(null);
+    setSubmitting(true);
+    try {
+      const res = await signup({
+        username: data.username,
+        password: data.password,
+        passwordConfirm: data.passwordRe,
+        email: data.email,
+        name: data.member,
+        part: data.part.toUpperCase(),
+        team: data.team,
+      });
+
+      if (res.success) {
+        router.push("/login");
+        return;
+      }
+
+      handleSignupError(res.error?.code, res.error?.message);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        const apiError = err.response?.data?.error;
+        handleSignupError(apiError?.code, apiError?.message);
+      } else {
+        setServerError("회원가입에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleSignupError = (code?: string, message?: string) => {
+    switch (code) {
+      case "U003":
+        setError("username", { message: message ?? "이미 사용 중인 아이디입니다." });
+        break;
+      case "U004":
+        setError("email", { message: message ?? "이미 사용 중인 이메일입니다." });
+        break;
+      case "U001":
+        setError("passwordRe", { message: message ?? "비밀번호가 일치하지 않습니다." });
+        break;
+      case "U002":
+      case "U005":
+        setServerError(message ?? "선택한 후보 정보가 올바르지 않습니다.");
+        break;
+      default:
+        setServerError(message ?? "회원가입에 실패했습니다.");
+    }
   };
 
   return (
@@ -238,11 +292,18 @@ export default function Signup() {
             : " "}
         </p>
 
+        {serverError && (
+          <p className="text-label2 text-red-500 py-2 text-center">
+            {serverError}
+          </p>
+        )}
+
         <button
           type="submit"
-          className="w-full py-4 bg-black text-white text-label1 cursor-pointer mt-[0.69rem]"
+          disabled={submitting}
+          className="w-full py-4 bg-black text-white text-label1 cursor-pointer mt-[0.69rem] disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          회원가입하기
+          {submitting ? "처리 중..." : "회원가입하기"}
         </button>
       </form>
     </main>
