@@ -6,6 +6,8 @@ export const API_ENDPOINTS = {
     LOGOUT: "/auth/logout",
   },
 
+  CANDIDATES: "/candidates",
+
   VOTES: {
     PART_LEADER: "/votes/part-leader",
     PART_LEADER_RESULT: "/votes/part-leader/result",
