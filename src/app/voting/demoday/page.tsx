@@ -3,10 +3,49 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { TEAM_NAMES, TeamName } from "@/constants/teams";
+import { voteDemoDay } from "@/api/vote";
+import { useAuthStore } from "@/store/authStore";
 
 export default function VotingDemoday() {
   const [selected, setSelected] = useState<TeamName | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [voteError, setVoteError] = useState<string | null>(null);
   const router = useRouter();
+  const userTeam = useAuthStore((state) => state.user?.team);
+
+  const handleVote = async () => {
+    if (!selected || isLoading) return;
+    setVoteError(null);
+    setIsLoading(true);
+
+    try {
+      await voteDemoDay(selected);
+      router.push("/voting/result/demoday");
+    } catch (err: unknown) {
+      //에러 타입 별로 정리
+      if (err && typeof err === "object" && "response" in err) {
+        const axiosErr = err as {
+          response: { status: number; data?: { error?: { code?: string } } };
+        };
+        const status = axiosErr.response.status;
+        const code = axiosErr.response.data?.error?.code;
+
+        if (status === 409 || code === "V005") {
+          setVoteError("이미 투표하셨습니다.");
+        } else if (status === 410 || code === "V006") {
+          setVoteError("이미 마감된 투표입니다.");
+        } else if (code === "V004") {
+          setVoteError("본인 팀에는 투표할 수 없습니다.");
+        } else if (code === "V001") {
+          setVoteError("유효하지 않은 팀입니다.");
+        } else {
+          setVoteError("투표 중 오류가 발생했습니다. 다시 시도해주세요.");
+        }
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <main
@@ -36,6 +75,7 @@ export default function VotingDemoday() {
           <p className="relative text-xl font-bold md:text-2xl">DEMO-DAY</p>
         </div>
       </div>
+
       <div className="absolute bottom-20 right-4 md:bottom-66 md:left-192 md:right-auto">
         <svg
           className="w-37.5 h-37.5 md:w-49.25 md:h-49.25"
@@ -51,15 +91,22 @@ export default function VotingDemoday() {
             strokeWidth="2"
           />
         </svg>
+
+        {voteError && (
+          <p className="absolute -top-8 left-1/2 -translate-x-1/2 w-40 text-center text-sm text-red-500 whitespace-nowrap">
+            {voteError}
+          </p>
+        )}
+
         <button
           type="button"
-          disabled={!selected}
-          onClick={() => router.push("/voting/result/demoday")}
+          disabled={!selected || isLoading}
+          onClick={handleVote}
           className={`absolute inset-0 flex items-center justify-center text-label1 disabled:cursor-default ${
-            selected ? "cursor-pointer" : ""
+            selected && !isLoading ? "cursor-pointer" : ""
           }`}
         >
-          {selected && <>투표하기 &gt;</>}
+          {selected && <>{isLoading ? "투표 중..." : "투표하기 >"}</>}
         </button>
       </div>
       <ul className="flex flex-col items-center gap-4.25 md:flex-1 md:justify-between md:gap-0 md:w-46">
@@ -69,6 +116,11 @@ export default function VotingDemoday() {
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
+                if (userTeam && team.toLowerCase() === userTeam.toLowerCase()) {
+                  setVoteError("본인 팀에는 투표할 수 없습니다.");
+                  return;
+                }
+                setVoteError(null);
                 setSelected(team);
               }}
               className={`relative text-label1 cursor-pointer px-6 py-2 ${

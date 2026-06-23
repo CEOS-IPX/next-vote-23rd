@@ -1,15 +1,101 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { notFound } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import RankBadge from "@/components/RankBadge";
 import VoteCount from "@/components/VoteCount";
+import { getPartLeaderResult, getDemoDayResult } from "@/api/vote";
 
-export default async function VotingResult({
+type Ranking = { rank: number; name: string; votes: number };
+
+const RANK_POSITIONS = [
+  {
+    voteCount: "absolute top-43 left-97.75",
+    badge: "absolute top-35.25 left-87",
+    color: "#E3E8F5",
+    badgeColor: "#1B7BE8",
+  },
+  {
+    voteCount: "absolute top-104 left-170.75",
+    badge: "absolute top-96.25 left-160",
+    color: "#F2F4F6",
+    badgeColor: "#FFEFB1",
+  },
+  {
+    voteCount: "absolute top-170 left-108.75",
+    badge: "absolute top-157.25 left-98",
+    color: "#F2F9F9",
+    badgeColor: "rgba(223, 70, 70, 0.57)",
+  },
+];
+
+export default function VotingResult({
   params,
 }: {
   params: Promise<{ type: string }>;
 }) {
-  const { type } = await params;
-  if (type !== "leader" && type !== "demoday") notFound();
+  const searchParams = useSearchParams();
+  const part = searchParams.get("part") ?? "FRONTEND";
+
+  const [rankings, setRankings] = useState<Ranking[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [notClosed, setNotClosed] = useState(false);
+  const [typeResolved, setTypeResolved] = useState<string | null>(null);
+
+  useEffect(() => {
+    params.then(({ type }) => {
+      if (type !== "leader" && type !== "demoday") {
+        notFound();
+      }
+      setTypeResolved(type);
+    });
+  }, [params]);
+
+  useEffect(() => {
+    if (!typeResolved) return;
+
+    const fetchResult = async () => {
+      try {
+        if (typeResolved === "leader") {
+          const res = await getPartLeaderResult(part);
+          if (res.data)
+            setRankings(
+              res.data.rankings
+                .slice(0, 3)
+                .map((r) => ({ rank: r.rank, name: r.name, votes: r.votes })),
+            );
+        } else {
+          const res = await getDemoDayResult();
+          if (res.data)
+            setRankings(
+              res.data.rankings
+                .slice(0, 3)
+                .map((r) => ({ rank: r.rank, name: r.team, votes: r.votes })),
+            );
+        }
+      } catch (err: unknown) {
+        if (err && typeof err === "object" && "response" in err) {
+          const axiosErr = err as { response: { status: number } };
+          if (axiosErr.response.status === 423) {
+            setNotClosed(true);
+          }
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResult();
+  }, [typeResolved, part]);
+
+  const top3 = RANK_POSITIONS.map((pos, i) => ({
+    ...pos,
+    name: rankings[i]?.name ?? "-",
+    votes: rankings[i]?.votes ?? 0,
+    rank: i + 1,
+  }));
 
   return (
     <main className="relative min-h-225 bg-linear-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF]">
@@ -38,25 +124,29 @@ export default async function VotingResult({
           fill="rgba(223, 70, 70, 0.57)"
         />
       </svg>
-      {/* TODO: API 연동 후 name, votes 교체 */}
-      <div className="absolute top-43 left-97.75">
-        <VoteCount name="이름" votes={0} color="#E3E8F5" />
-      </div>
-      <div className="absolute top-104 left-170.75">
-        <VoteCount name="이름" votes={0} color="#F2F4F6" />
-      </div>
-      <div className="absolute top-170 left-108.75">
-        <VoteCount name="이름" votes={0} color="#F2F9F9" />
-      </div>
-      <div className="absolute top-35.25 left-87">
-        <RankBadge rank={1} color="#1B7BE8" />
-      </div>
-      <div className="absolute top-96.25 left-160">
-        <RankBadge rank={2} color="#FFEFB1" />
-      </div>
-      <div className="absolute top-157.25 left-98">
-        <RankBadge rank={3} color="rgba(223, 70, 70, 0.57)" />
-      </div>
+
+      {!loading && notClosed && (
+        <p className="absolute top-80 left-1/2 -translate-x-1/2 text-xl font-bold text-gray-500 text-center">
+          아직 투표가 마감되지 않았습니다.
+        </p>
+      )}
+
+      {!loading &&
+        !notClosed &&
+        top3.map((item) => (
+          <div key={item.rank}>
+            <div className={item.voteCount}>
+              <VoteCount
+                name={item.name}
+                votes={item.votes}
+                color={item.color}
+              />
+            </div>
+            <div className={item.badge}>
+              <RankBadge rank={item.rank} color={item.badgeColor} />
+            </div>
+          </div>
+        ))}
     </main>
   );
 }
