@@ -27,7 +27,7 @@ api.interceptors.response.use(
 
       try {
         const { data } = await axios.post(
-          API_ENDPOINTS.AUTH.REISSUE,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL ?? ""}${API_ENDPOINTS.AUTH.REISSUE}`,
           {},
           { withCredentials: true },
         );

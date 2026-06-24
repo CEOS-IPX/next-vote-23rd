@@ -1,9 +1,12 @@
 export const API_ENDPOINTS = {
   AUTH: {
+    SIGNUP: "/auth/signup",
     LOGIN: "/auth/login",
     REISSUE: "/auth/reissue",
     LOGOUT: "/auth/logout",
   },
+
+  CANDIDATES: "/candidates",
 
   VOTES: {
     PART_LEADER: "/votes/part-leader",
