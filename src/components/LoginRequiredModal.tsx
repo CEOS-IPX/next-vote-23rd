@@ -1,0 +1,45 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
+interface LoginRequiredModalProps {
+  onClose: () => void;
+}
+
+export default function LoginRequiredModal({ onClose }: LoginRequiredModalProps) {
+  const router = useRouter();
+
+  const handleLogin = () => {
+    onClose();
+    router.push("/login");
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[#191F28] text-white rounded-2xl px-6 py-8 flex flex-col items-center gap-6 w-80"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <p className="text-caption1 font-semibold text-center">로그인 후 이용 가능한 페이지입니다.</p>
+      
+        <div className="flex gap-3 w-full">
+          <button
+            onClick={onClose}
+            className="flex-1 py-2 rounded-xl border border-white bg-white text-black text-caption2 font-semibold  cursor-pointer"
+          >
+            취소
+          </button>
+          <button
+            onClick={handleLogin}
+            className="flex-1 py-3 rounded-xl bg-blue text-white text-caption2 font-semibold cursor-pointer"
+          >
+            로그인
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
