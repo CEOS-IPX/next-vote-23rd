@@ -190,8 +190,10 @@ export default function Signup() {
         setError("passwordRe", { message: message ?? "비밀번호가 일치하지 않습니다." });
         break;
       case "U002":
+        setError("member", { message: message ?? "선택한 후보 정보가 올바르지 않습니다." });
+        break;
       case "U005":
-        setServerError(message ?? "선택한 후보 정보가 올바르지 않습니다.");
+        setError("member", { message: message ?? "이미 가입된 후보입니다." });
         break;
       default:
         setServerError(message ?? "회원가입에 실패했습니다.");
