@@ -85,6 +85,7 @@ export default function Signup() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [apiFieldErrors, setApiFieldErrors] = useState<{
     email?: string;
     username?: string;
@@ -174,7 +175,7 @@ export default function Signup() {
       });
 
       if (res.success) {
-        router.push("/login");
+        setShowSuccessModal(true);
         return;
       }
 
@@ -363,6 +364,25 @@ export default function Signup() {
           {submitting ? "처리 중..." : "회원가입하기"}
         </button>
       </form>
+
+      {showSuccessModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-6"
+        >
+          <div className="w-full max-w-[17rem] bg-[#191F28] text-white rounded-[0.75rem] p-5 flex flex-col gap-4">
+            <p className="text-label2 text-center">가입이 완료되었습니다.</p>
+            <button
+              type="button"
+              onClick={() => router.push("/login")}
+              className="w-full py-2.5 bg-white text-black text-label2 cursor-pointer rounded-[0.5rem]"
+            >
+              로그인하러 가기
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
