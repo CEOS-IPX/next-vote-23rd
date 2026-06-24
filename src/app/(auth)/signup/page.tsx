@@ -85,13 +85,25 @@ export default function Signup() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [apiFieldErrors, setApiFieldErrors] = useState<{
+    email?: string;
+    username?: string;
+    member?: string;
+    passwordRe?: string;
+  }>({});
+  const clearApiFieldError = (field: keyof typeof apiFieldErrors) =>
+    setApiFieldErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
   const {
     register,
     control,
     handleSubmit,
     watch,
     setValue,
-    setError,
     formState: { errors },
   } = useForm<SignupForm>({
     resolver: zodResolver(signupSchema),
@@ -148,6 +160,7 @@ export default function Signup() {
 
   const onSubmit = async (data: SignupForm) => {
     setServerError(null);
+    setApiFieldErrors({});
     setSubmitting(true);
     try {
       const res = await signup({
@@ -181,19 +194,19 @@ export default function Signup() {
   const handleSignupError = (code?: string, message?: string) => {
     switch (code) {
       case "U003":
-        setError("username", { message: message ?? "이미 사용 중인 아이디입니다." });
+        setApiFieldErrors({ username: message ?? "이미 사용 중인 아이디입니다." });
         break;
       case "U004":
-        setError("email", { message: message ?? "이미 사용 중인 이메일입니다." });
+        setApiFieldErrors({ email: message ?? "이미 사용 중인 이메일입니다." });
         break;
       case "U001":
-        setError("passwordRe", { message: message ?? "비밀번호가 일치하지 않습니다." });
+        setApiFieldErrors({ passwordRe: message ?? "비밀번호가 일치하지 않습니다." });
         break;
       case "U002":
-        setError("member", { message: message ?? "선택한 후보 정보가 올바르지 않습니다." });
+        setApiFieldErrors({ member: message ?? "선택한 후보 정보가 올바르지 않습니다." });
         break;
       case "U005":
-        setError("member", { message: message ?? "이미 가입된 후보입니다." });
+        setApiFieldErrors({ member: message ?? "이미 가입된 후보입니다." });
         break;
       default:
         setServerError(message ?? "회원가입에 실패했습니다.");
@@ -252,39 +265,55 @@ export default function Signup() {
                 value={field.value}
                 placeholder="이름을 선택해 주세요"
                 options={memberOptions}
-                onChange={field.onChange}
+                onChange={(v) => {
+                  field.onChange(v);
+                  clearApiFieldError("member");
+                }}
                 disabled={!team}
               />
             )}
           />
         </div>
 
-        <label className="flex items-center mt-[1.88rem]">
+        <p className="text-label2 text-red-500 py-2 pl-3 min-h-[2.5rem]">
+          {apiFieldErrors.member ?? " "}
+        </p>
+
+        <label className="flex items-center">
           <span className="text-label1 w-[5rem] md:w-[8.75rem] shrink-0 md:whitespace-nowrap">
             아이디
           </span>
           <input
             type="text"
-            {...register("username")}
+            {...register("username", {
+              onChange: () => clearApiFieldError("username"),
+            })}
             placeholder="아이디를 입력해 주세요"
             className="flex-1 border-b border-black outline-none p-3"
           />
         </label>
 
-        <label className="flex items-center mt-[1.88rem]">
+        <p className="text-label2 text-red-500 py-2 ml-[5rem] md:ml-[8.75rem] pl-3 min-h-[2.5rem]">
+          {apiFieldErrors.username ?? " "}
+        </p>
+
+        <label className="flex items-center">
           <span className="text-label1 w-[5rem] md:w-[8.75rem] shrink-0 md:whitespace-nowrap">
             이메일
           </span>
           <input
             type="email"
-            {...register("email")}
+            {...register("email", {
+              onChange: () => clearApiFieldError("email"),
+            })}
             placeholder="이메일을 입력해 주세요"
             className="flex-1 border-b border-black outline-none p-3"
           />
         </label>
 
         <p className="text-label2 text-red-500 py-2 ml-[5rem] md:ml-[8.75rem] pl-3 min-h-[2.5rem]">
-          {email.length > 0 && errors.email ? errors.email.message : " "}
+          {apiFieldErrors.email ??
+            (email.length > 0 && errors.email ? errors.email.message : " ")}
         </p>
 
         <label className="flex items-center">
@@ -305,16 +334,19 @@ export default function Signup() {
           </span>
           <input
             type="password"
-            {...register("passwordRe")}
+            {...register("passwordRe", {
+              onChange: () => clearApiFieldError("passwordRe"),
+            })}
             placeholder="비밀번호를 다시 입력해 주세요"
             className="flex-1 border-b border-black outline-none p-3"
           />
         </label>
 
         <p className="text-label2 text-red-500 py-2 ml-[5rem] md:ml-[8.75rem] pl-3 min-h-[2.5rem]">
-          {passwordRe.length > 0 && errors.passwordRe
-            ? errors.passwordRe.message
-            : " "}
+          {apiFieldErrors.passwordRe ??
+            (passwordRe.length > 0 && errors.passwordRe
+              ? errors.passwordRe.message
+              : " ")}
         </p>
 
         {serverError && (
