@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { TEAM_NAMES, TeamName } from "@/constants/teams";
 import { voteDemoDay } from "@/api/vote";
 import { useAuthStore } from "@/store/authStore";
+import ErrorModal from "@/components/ErrorModal";
 
 export default function VotingDemoday() {
   const [selected, setSelected] = useState<TeamName | null>(null);
@@ -93,9 +94,7 @@ export default function VotingDemoday() {
         </svg>
 
         {voteError && (
-          <p className="absolute -top-8 left-1/2 -translate-x-1/2 w-40 text-center text-sm text-red-500 whitespace-nowrap">
-            {voteError}
-          </p>
+          <ErrorModal message={voteError} onClose={() => setVoteError(null)} />
         )}
 
         <button

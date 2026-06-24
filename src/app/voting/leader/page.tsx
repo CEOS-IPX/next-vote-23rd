@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { TEAM_MEMBERS, type Part } from "@/constants/teams";
 import { votePartLeader } from "@/api/vote";
 import { useAuthStore } from "@/store/authStore";
+import ErrorModal from "@/components/ErrorModal";
 
 export default function VotingLeader() {
   const [selected, setSelected] = useState<string | null>(null);
@@ -118,9 +119,7 @@ export default function VotingLeader() {
       </ul>
 
       {voteError && (
-        <p className="absolute top-32 right-6 md:top-68 md:left-132 md:right-auto text-sm text-red-500 max-w-44 text-center">
-          {voteError}
-        </p>
+        <ErrorModal message={voteError} onClose={() => setVoteError(null)} />
       )}
 
       <button
