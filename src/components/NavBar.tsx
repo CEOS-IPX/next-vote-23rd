@@ -27,6 +27,7 @@ export default function NavBar({ className }: { className?: string }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [blockedPath, setBlockedPath] = useState<string | undefined>(undefined);
   const isLoggedIn = useAuthStore((s) => s.accessToken !== null);
   const clearAuth = useAuthStore((s) => s.clearAuth);
 
@@ -38,6 +39,7 @@ export default function NavBar({ className }: { className?: string }) {
           if (prop === "push") {
             return (href: string, options?: Parameters<typeof router.push>[1]) => {
               if (!isLoggedIn && PROTECTED_PATHS.some((p) => href.startsWith(p))) {
+                setBlockedPath(href);
                 setShowLoginModal(true);
                 return Promise.resolve(true);
               }
@@ -53,6 +55,7 @@ export default function NavBar({ className }: { className?: string }) {
   const handleLogout = async () => {
     try {
       await logoutApi();
+      console.log("로그아웃 성공");
     } finally {
       clearAuth();
       router.push("/login");
@@ -85,7 +88,7 @@ export default function NavBar({ className }: { className?: string }) {
           {isLoggedIn ? (
             <button
               onClick={handleLogout}
-              className="text-blue-500 cursor-pointer"
+              className="text-white cursor-pointer"
             >
               LOGOUT
             </button>
@@ -149,7 +152,7 @@ export default function NavBar({ className }: { className?: string }) {
                   handleLogout();
                   setOpen(false);
                 }}
-                className="text-2xl font-bold text-blue-500 cursor-pointer"
+                className="text-2xl font-bold text-white cursor-pointer"
               >
                 LOGOUT
               </button>
@@ -167,7 +170,10 @@ export default function NavBar({ className }: { className?: string }) {
       )}
 
       {showLoginModal && (
-        <LoginRequiredModal onClose={() => setShowLoginModal(false)} />
+        <LoginRequiredModal
+          onClose={() => setShowLoginModal(false)}
+          redirectTo={blockedPath}
+        />
       )}
     </div>
   );

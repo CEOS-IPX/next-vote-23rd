@@ -4,14 +4,16 @@ import { useRouter } from "next/navigation";
 
 interface LoginRequiredModalProps {
   onClose: () => void;
+  redirectTo?: string;
 }
 
-export default function LoginRequiredModal({ onClose }: LoginRequiredModalProps) {
+export default function LoginRequiredModal({ onClose, redirectTo }: LoginRequiredModalProps) {
   const router = useRouter();
 
   const handleLogin = () => {
     onClose();
-    router.push("/login");
+    const dest = redirectTo ? `/login?redirect=${encodeURIComponent(redirectTo)}` : "/login";
+    router.push(dest);
   };
 
   return (

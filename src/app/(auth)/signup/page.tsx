@@ -215,7 +215,7 @@ export default function Signup() {
   };
 
   return (
-    <main className="flex flex-col gap-[1.88rem] w-full px-[1.25rem] md:w-[34.375rem] md:px-0">
+    <main className="flex flex-col gap-[1.88rem] w-full px-5 md:w-137.5 md:px-0">
       <p className="text-[1.25rem] font-extrabold leading-[135%] tracking-[-0.00125rem] py-3 border-b">
         SIGNUP
       </p>
@@ -229,7 +229,7 @@ export default function Signup() {
               key={p}
               type="button"
               onClick={() => handlePartChange(p)}
-              className={`w-1/2 md:w-[17.1875rem] h-[3.1875rem] border border-black text-label2 cursor-pointer transition-colors ${rounded} ${
+              className={`w-1/2 md:w-68.75 h-12.75 border border-black text-label2 cursor-pointer transition-colors ${rounded} ${
                 selected ? "bg-black text-white" : "bg-white text-black"
               }`}
             >
@@ -276,12 +276,12 @@ export default function Signup() {
           />
         </div>
 
-        <p className="text-label2 text-red-500 py-2 pl-3 min-h-[2.5rem]">
+        <p className="text-label2 text-red-500 py-2 pl-3 min-h-10">
           {apiFieldErrors.member ?? " "}
         </p>
 
         <label className="flex items-center">
-          <span className="text-label1 w-[5rem] md:w-[8.75rem] shrink-0 md:whitespace-nowrap">
+          <span className="text-label1 w-20 md:w-35 shrink-0 md:whitespace-nowrap">
             아이디
           </span>
           <input
@@ -294,12 +294,12 @@ export default function Signup() {
           />
         </label>
 
-        <p className="text-label2 text-red-500 py-2 ml-[5rem] md:ml-[8.75rem] pl-3 min-h-[2.5rem]">
+        <p className="text-label2 text-red-500 py-2 ml-20 md:ml-35 pl-3 min-h-10">
           {apiFieldErrors.username ?? " "}
         </p>
 
         <label className="flex items-center">
-          <span className="text-label1 w-[5rem] md:w-[8.75rem] shrink-0 md:whitespace-nowrap">
+          <span className="text-label1 w-20 md:w-35 shrink-0 md:whitespace-nowrap">
             이메일
           </span>
           <input
@@ -312,13 +312,13 @@ export default function Signup() {
           />
         </label>
 
-        <p className="text-label2 text-red-500 py-2 ml-[5rem] md:ml-[8.75rem] pl-3 min-h-[2.5rem]">
+        <p className="text-label2 text-red-500 py-2 ml-20 md:ml-35 pl-3 min-h-10">
           {apiFieldErrors.email ??
             (email.length > 0 && errors.email ? errors.email.message : " ")}
         </p>
 
         <label className="flex items-center">
-          <span className="text-label1 w-[5rem] md:w-[8.75rem] shrink-0 md:whitespace-nowrap">
+          <span className="text-label1 w-20 md:w-35 shrink-0 md:whitespace-nowrap">
             비밀번호
           </span>
           <input
@@ -330,7 +330,7 @@ export default function Signup() {
         </label>
 
         <label className="flex items-center mt-[1.88rem]">
-          <span className="text-label1 w-[5rem] md:w-[8.75rem] shrink-0 md:whitespace-nowrap">
+          <span className="text-label1 w-20 md:w-35 shrink-0 md:whitespace-nowrap">
             비밀번호 재확인
           </span>
           <input
@@ -343,7 +343,7 @@ export default function Signup() {
           />
         </label>
 
-        <p className="text-label2 text-red-500 py-2 ml-[5rem] md:ml-[8.75rem] pl-3 min-h-[2.5rem]">
+        <p className="text-label2 text-red-500 py-2 ml-20 md:ml-35 pl-3 min-h-10">
           {apiFieldErrors.passwordRe ??
             (passwordRe.length > 0 && errors.passwordRe
               ? errors.passwordRe.message
@@ -371,12 +371,12 @@ export default function Signup() {
           aria-modal="true"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-6"
         >
-          <div className="w-full max-w-[17rem] bg-[#191F28] text-white rounded-[0.75rem] p-5 flex flex-col gap-4">
+          <div className="w-full max-w-68 bg-[#191F28] text-white rounded-xl p-5 flex flex-col gap-4">
             <p className="text-label2 text-center">가입이 완료되었습니다.</p>
             <button
               type="button"
               onClick={() => router.push("/login")}
-              className="w-full py-2.5 bg-white text-black text-label2 cursor-pointer rounded-[0.5rem]"
+              className="w-full py-2.5 bg-white text-black text-label2 cursor-pointer rounded-lg"
             >
               로그인하러 가기
             </button>

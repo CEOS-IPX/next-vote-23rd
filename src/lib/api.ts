@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuthStore } from "@/store/authStore";
 import { API_ENDPOINTS } from "@/constants/endpoint";
 
-//맨처음에 백엔드 ai 자겨오는 부분
+//맨처음에 백엔드 api 자겨오는 부분
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   withCredentials: true,
@@ -22,7 +22,11 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const skipReissue = [API_ENDPOINTS.AUTH.LOGIN, API_ENDPOINTS.AUTH.REISSUE].some(
+      (path) => originalRequest.url?.includes(path),
+    );
+
+    if (error.response?.status === 401 && !originalRequest._retry && !skipReissue) {
       originalRequest._retry = true;
 
       try {
@@ -36,9 +40,13 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
 
         return api(originalRequest);
-      } catch {
+      } catch (reissueError) {
         useAuthStore.getState().clearAuth();
-        window.location.href = "/login";
+        const code =
+          axios.isAxiosError(reissueError)
+            ? (reissueError.response?.data?.error?.code ?? "session")
+            : "session";
+        window.location.href = `/login?reason=${code}`;
       }
     }
 
