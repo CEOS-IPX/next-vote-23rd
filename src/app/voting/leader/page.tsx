@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { TEAM_MEMBERS, type Part } from "@/constants/teams";
-import { votePartLeader } from "@/api/vote";
+import { type Part } from "@/constants/teams";
+import { votePartLeader, getPartLeaderCandidates } from "@/api/vote";
 import { useAuthStore } from "@/store/authStore";
 import ErrorModal from "@/components/ErrorModal";
 
 export default function VotingLeader() {
+  const [candidates, setCandidates] = useState<string[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [voteError, setVoteError] = useState<string | null>(null);
@@ -18,8 +19,15 @@ export default function VotingLeader() {
     | undefined;
   const userName = useAuthStore((state) => state.user?.name);
   const part: Part = userPart ?? "frontend";
-  const candidates = Object.values(TEAM_MEMBERS[part]).flat();
   const title = part === "backend" ? "BE - LEADER" : "FE - LEADER";
+
+  useEffect(() => {
+    getPartLeaderCandidates(part).then((res) => {
+      if (res.data) {
+        setCandidates(res.data.candidates.map((c) => c.name));
+      }
+    });
+  }, [part]);
 
   const handleVote = async () => {
     if (!selected || isLoading) return;
@@ -28,6 +36,8 @@ export default function VotingLeader() {
 
     try {
       await votePartLeader(selected);
+      console.log("파트장 투표 성공(api 연동 완료)", selected);
+      localStorage.setItem("voted_leader", "1");
       router.push(`/voting/result/leader?part=${part.toUpperCase()}`);
     } catch (err: unknown) {
       if (err && typeof err === "object" && "response" in err) {
@@ -36,6 +46,7 @@ export default function VotingLeader() {
         };
         const status = axiosErr.response.status;
         const code = axiosErr.response.data?.error?.code;
+        console.error("파트장 투표 실패", status, ", code:", code, axiosErr.response.data);
 
         if (status === 409 || code === "V005") {
           setVoteError("이미 투표하셨습니다.");
@@ -50,6 +61,8 @@ export default function VotingLeader() {
         } else {
           setVoteError("투표 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
+      } else {
+        console.error("파트장 투표 (예상치 못한 에러):", err);
       }
     } finally {
       setIsLoading(false);
@@ -121,7 +134,6 @@ export default function VotingLeader() {
       {voteError && (
         <ErrorModal message={voteError} onClose={() => setVoteError(null)} />
       )}
-
       <button
         type="button"
         disabled={!selected || isLoading}

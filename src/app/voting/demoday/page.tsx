@@ -1,18 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { TEAM_NAMES, TeamName } from "@/constants/teams";
-import { voteDemoDay } from "@/api/vote";
+import { voteDemoDay, getDemoDayCandidates } from "@/api/vote";
 import { useAuthStore } from "@/store/authStore";
 import ErrorModal from "@/components/ErrorModal";
 
 export default function VotingDemoday() {
-  const [selected, setSelected] = useState<TeamName | null>(null);
+  const [teams, setTeams] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [voteError, setVoteError] = useState<string | null>(null);
   const router = useRouter();
   const userTeam = useAuthStore((state) => state.user?.team);
+
+  useEffect(() => {
+    getDemoDayCandidates().then((res) => {
+      if (res.data) {
+        setTeams(res.data.candidates.map((c) => c.team));
+      }
+    });
+  }, []);
 
   const handleVote = async () => {
     if (!selected || isLoading) return;
@@ -21,7 +29,10 @@ export default function VotingDemoday() {
 
     try {
       await voteDemoDay(selected);
+      console.log("데모데이 투표 성공(api 연동 완료)", selected);
+      localStorage.setItem("voted_demoday", "1");
       router.push("/voting/result/demoday");
+
     } catch (err: unknown) {
       //에러 타입 별로 정리
       if (err && typeof err === "object" && "response" in err) {
@@ -30,6 +41,7 @@ export default function VotingDemoday() {
         };
         const status = axiosErr.response.status;
         const code = axiosErr.response.data?.error?.code;
+        console.error("데모데이 투표 실패 ", status, ", code:", code, axiosErr.response.data);
 
         if (status === 409 || code === "V005") {
           setVoteError("이미 투표하셨습니다.");
@@ -42,6 +54,8 @@ export default function VotingDemoday() {
         } else {
           setVoteError("투표 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
+      } else {
+        console.error("[데모데이 투표] 예상치 못한 에러:", err);
       }
     } finally {
       setIsLoading(false);
@@ -96,7 +110,6 @@ export default function VotingDemoday() {
         {voteError && (
           <ErrorModal message={voteError} onClose={() => setVoteError(null)} />
         )}
-
         <button
           type="button"
           disabled={!selected || isLoading}
@@ -109,7 +122,7 @@ export default function VotingDemoday() {
         </button>
       </div>
       <ul className="flex flex-col items-center gap-4.25 md:flex-1 md:justify-between md:gap-0 md:w-46">
-        {TEAM_NAMES.map((team) => (
+        {teams.map((team: string) => (
           <li key={team}>
             <button
               type="button"
