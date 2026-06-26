@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import MemberCard from "@/components/MemberCard";
 import { MEMBERS, type Part } from "@/constants/members";
+import { useAuthStore } from "@/store/authStore";
 
 const PARTS: Part[] = ["PM", "DESIGN", "FRONTEND", "BACKEND"];
 
@@ -21,13 +22,22 @@ const PART_LABELS_MOBILE: Record<Part, string> = {
   BACKEND: "BACK-END",
 };
 
+function getInitialPart(userPart: string | undefined): Part {
+  const upper = userPart?.toUpperCase();
+  if (upper === "FRONTEND" || upper === "BACKEND") {
+    return upper;
+  }
+  return "FRONTEND";
+}
+
 export default function Members() {
-  const [selected, setSelected] = useState<Part>("FRONTEND");
+  const userPart = useAuthStore((state) => state.user?.part);
+  const [selected, setSelected] = useState<Part>(() => getInitialPart(userPart));
 
   return (
     <main className="w-full">
       <div className="md:hidden pt-6 px-5">
-        <div className="relative w-[349px] h-[106px]">
+        <div className="relative w-87.25 h-26.5">
           <Image
             src="/figures/figure-small-membertab.svg"
             alt=""
@@ -35,7 +45,7 @@ export default function Members() {
             fill
             className="object-contain"
           />
-          <div className="absolute top-[55px] left-[27px] w-[316px] h-[44px] flex items-center justify-around">
+          <div className="absolute top-13.75 left-6.75 w-79 h-11 flex items-center justify-around">
             {PARTS.map((part) => (
               <button
                 key={part}
@@ -55,7 +65,7 @@ export default function Members() {
           23th MEMBERS
         </h1>
 
-        <div className="mt-4 grid grid-cols-2 gap-x-[21px] gap-y-[20px] pb-8">
+        <div className="mt-4 grid grid-cols-2 gap-x-5.25 gap-y-5 pb-8">
           {MEMBERS[selected]
             .filter((m) => !m.isExecutive)
             .map((m) => (
@@ -69,11 +79,11 @@ export default function Members() {
         </div>
       </div>
 
-      <div className="hidden md:block relative min-h-[1000px]">
-        <h1 className="absolute top-[155px] left-[640px] text-[32px] font-bold leading-[135%] tracking-[-0.032px] text-black">
+      <div className="hidden md:block relative min-h-250">
+        <h1 className="absolute top-38.75 left-160 text-[32px] font-bold leading-[135%] tracking-[-0.032px] text-black">
           23th MEMBERS
         </h1>
-        <div className="absolute top-[236px] left-[640px] grid grid-cols-2 gap-x-[21px] gap-y-[20px]">
+        <div className="absolute top-59 left-160 grid grid-cols-2 gap-x-5.25 gap-y-5">
           {MEMBERS[selected]
             .filter((member) => !member.isExecutive)
             .map((member) => (
@@ -85,18 +95,14 @@ export default function Members() {
               />
             ))}
         </div>
-        <div className="absolute top-[183px] left-[97px] flex flex-col items-start justify-between w-[155px] h-[288px] p-[20px] border border-black">
-          <span className="absolute -top-[11.5px] -left-[11.5px] w-[23px] h-[23px] border border-black" />
-          <span className="absolute -top-[11.5px] -right-[11.5px] w-[23px] h-[23px] border border-black" />
-          <span className="absolute -bottom-[11.5px] -left-[11.5px] w-[23px] h-[23px] border border-black" />
-          <span className="absolute -bottom-[11.5px] -right-[11.5px] w-[23px] h-[23px] border border-black" />
-          <span className="absolute -right-[71px] -bottom-[96px] w-[149px] h-[176px] bg-[#F2F4F6] -z-10" />
+        <div className="absolute top-45.75 left-24.25 flex flex-col items-start justify-between w-38.75 h-72 p-5 border border-black">
+          <span className="absolute -right-17.75 -bottom-24 w-37.25 h-44 bg-[#F2F4F6] -z-10" />
           {PARTS.map((part) => (
             <button
               key={part}
               type="button"
               onClick={() => setSelected(part)}
-              className={`text-left text-[20px] leading-[135%] tracking-[-0.02px] text-black cursor-pointer whitespace-pre-line ${
+              className={`text-left text-xl leading-[135%] tracking-[-0.02px] text-black cursor-pointer whitespace-pre-line ${
                 selected === part ? "font-bold underline" : "font-normal"
               }`}
             >
