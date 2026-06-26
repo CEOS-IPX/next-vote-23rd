@@ -1,21 +1,39 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { Part } from "@/constants/teams";
 import { useAuthStore } from "@/store/authStore";
 
 export default function Voting() {
+  const router = useRouter();
   const userPart = useAuthStore((state) => state.user?.part?.toLowerCase()) as
     | Part
     | undefined;
   const part: Part = userPart ?? "frontend";
   const partLabel = part === "backend" ? "BE" : "FE";
 
+  const handleLeaderClick = () => {
+    if (localStorage.getItem("voted_leader")) {
+      router.push(`/voting/result/leader?part=${part.toUpperCase()}`);
+    } else {
+      router.push("/voting/leader");
+    }
+  };
+
+  const handleDemodayClick = () => {
+    if (localStorage.getItem("voted_demoday")) {
+      router.push("/voting/result/demoday");
+    } else {
+      router.push("/voting/demoday");
+    }
+  };
+
   return (
     <main className="relative min-h-screen bg-linear-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF]">
-      <Link
-        href="/voting/leader"
-        className="absolute top-40 left-6 md:top-51 md:left-72"
+      <button
+        type="button"
+        onClick={handleLeaderClick}
+        className="absolute top-40 left-6 md:top-51 md:left-72 cursor-pointer"
       >
         <div className="relative flex items-center justify-center w-76.25 h-39.5">
           <img
@@ -40,11 +58,12 @@ export default function Voting() {
             {partLabel} - LEADER
           </p>
         </div>
-      </Link>
+      </button>
 
-      <Link
-        href="/voting/demoday"
-        className="absolute bottom-12 right-8 md:bottom-40 md:right-120"
+      <button
+        type="button"
+        onClick={handleDemodayClick}
+        className="absolute bottom-12 right-8 md:bottom-40 md:right-120 cursor-pointer"
       >
         <div className="relative flex items-center justify-center w-76.25 h-39.5">
           <img
@@ -67,7 +86,7 @@ export default function Voting() {
           />
           <p className="relative text-xl font-bold md:text-2xl">DEMO-DAY</p>
         </div>
-      </Link>
+      </button>
 
       <svg
         className="absolute bottom-20 right-4 w-37.5 h-37.5 md:bottom-66 md:left-192 md:right-auto md:w-49.25 md:h-49.25 pointer-events-none"
