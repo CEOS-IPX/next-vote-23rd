@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { notFound } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import RankBadge from "@/components/RankBadge";
 import VoteCount from "@/components/VoteCount";
@@ -12,20 +13,20 @@ type Ranking = { rank: number; name: string; votes: number };
 
 const RANK_POSITIONS = [
   {
-    voteCount: "absolute top-43 left-97.75",
-    badge: "absolute top-35.25 left-87",
+    voteCount: "absolute top-40 left-17 md:top-43 md:left-97.75",
+    badge: "absolute top-32 left-10 md:top-35.25 md:left-87",
     color: "#E3E8F5",
     badgeColor: "#1B7BE8",
   },
   {
-    voteCount: "absolute top-104 left-170.75",
-    badge: "absolute top-96.25 left-160",
+    voteCount: "absolute top-94 left-28 md:top-104 md:left-170.75",
+    badge: "absolute top-86 left-20 md:top-96.25 md:left-160",
     color: "#F2F4F6",
     badgeColor: "#FFEFB1",
   },
   {
-    voteCount: "absolute top-170 left-108.75",
-    badge: "absolute top-157.25 left-98",
+    voteCount: "absolute top-148 left-17 md:top-170 md:left-108.75",
+    badge: "absolute top-136 left-10 md:top-157.25 md:left-98",
     color: "#F2F9F9",
     badgeColor: "rgba(223, 70, 70, 0.57)",
   },
@@ -98,23 +99,25 @@ export default function VotingResult({
   }));
 
   return (
-    <main className="relative min-h-225 bg-linear-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF]">
-      <div className="absolute top-66.5 left-130 w-56.5 h-57.5 border border-black" />
-      <div className="absolute top-132.25 left-151.25 w-73 h-45.5 border border-black" />
-      <img
+    <main className="relative min-h-215 md:min-h-225 bg-linear-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF]">
+      <div className="absolute top-62 left-31 w-35 h-36 md:top-66.5 md:left-130 md:w-56.5 md:h-57.5 border border-black" />
+      <div className="absolute top-118 left-20 w-48 h-30 md:top-132.25 md:left-151.25 md:w-73 md:h-45.5 border border-black" />
+      <Image
         src="/figures/figure-star-8.svg"
         alt=""
         aria-hidden
-        className="absolute top-90.75 left-71.5 w-53 h-53 pointer-events-none"
+        width={212}
+        height={212}
+        className="absolute top-76 left-2 w-33 h-33 md:top-90.75 md:left-71.5 md:w-53 md:h-53 pointer-events-none"
       />
       <Link
         href="/voting"
-        className="absolute top-166.75 left-187.75 text-xl font-extrabold leading-[135%] tracking-[-0.02px] text-black"
+        className="absolute top-190 right-6 md:top-166.75 md:left-187.75 md:right-auto text-xl font-extrabold leading-[135%] tracking-[-0.02px] text-black"
       >
         메인으로 가기 &gt;
       </Link>
       <svg
-        className="absolute top-48.5 left-196.25 w-36 h-36 pointer-events-none"
+        className="absolute top-50 right-3 w-28 h-28 md:top-48.5 md:left-196.25 md:right-auto md:w-36 md:h-36 pointer-events-none"
         viewBox="0 0 197 197"
         fill="none"
         aria-hidden
