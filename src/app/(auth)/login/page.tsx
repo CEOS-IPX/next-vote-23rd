@@ -70,7 +70,7 @@ export default function Login() {
       setAuth(res.data!.accessToken, res.data!.user);
       console.log("로그인 성공", res.data!.user);
       const redirect = searchParams.get("redirect");
-      router.push(redirect ?? "/members");
+      router.push(redirect ?? "/voting");
 
     } catch (err: unknown) {
       if (err && typeof err === "object" && "response" in err) {
