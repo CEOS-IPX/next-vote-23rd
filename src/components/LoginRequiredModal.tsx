@@ -25,7 +25,7 @@ export default function LoginRequiredModal({ onClose, redirectTo }: LoginRequire
         className="bg-[#191F28] text-white rounded-2xl px-6 py-8 flex flex-col items-center gap-6 w-80"
         onClick={(e) => e.stopPropagation()}
       >
-        <p className="text-caption1 font-semibold text-center">로그인 후 이용 가능한 페이지입니다.</p>
+        <p className="text-caption1 font-semibold text-center">로그인이 필요한 페이지입니다. <br /> 로그인하시겠습니까? </p>
       
         <div className="flex gap-3 w-full">
           <button

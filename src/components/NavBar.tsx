@@ -16,7 +16,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "VOTING", href: "/voting", protected: true },
-  { label: "MEMBERS", href: "/members" },
+  { label: "MEMBERS", href: "/members", protected: true },
   { label: "ABOUT US", href: "/about" },
 ];
 
