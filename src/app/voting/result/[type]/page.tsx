@@ -99,7 +99,8 @@ export default function VotingResult({
   }));
 
   return (
-    <main className="relative min-h-215 md:min-h-225 bg-linear-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF]">
+    <main className="min-h-215 md:min-h-225 bg-linear-to-b from-[#FFFFFF] via-[#D2E6FD] to-[#FFFFFF]">
+      <div className="relative min-h-215 md:min-h-225 md:w-240 md:mx-auto md:-translate-x-32">
       <div className="absolute top-62 left-31 w-35 h-36 md:top-66.5 md:left-130 md:w-56.5 md:h-57.5 border border-black" />
       <div className="absolute top-118 left-20 w-48 h-30 md:top-132.25 md:left-151.25 md:w-73 md:h-45.5 border border-black" />
       <Image
@@ -150,6 +151,7 @@ export default function VotingResult({
             </div>
           </div>
         ))}
+      </div>
     </main>
   );
 }
